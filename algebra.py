@@ -1,6 +1,10 @@
 import numpy as np
 
-# matrix_multi?
+# TODO The Eigengap Heuristic
+# TODO Algorithm 3 The Normalized Spectral Clustering Algorithm
+
+
+
 """
 NOTES:
 * modified_gram_schmidt- maybe working with transposed matrix is cheaper? is a[i] cheaper than a[:,i]?
@@ -10,12 +14,14 @@ NOTES:
 def calc_l2_norm(a):
     return np.sqrt(a ** 2)
 
+
 def diagonal_degree_matrix(W):
     """
     W = The Weighted Adjacency Matrix
     :return: D, D[i] = sum(W[i])**(-1/2)
     """
     return np.power(np.sum(W, axis=1), -0.5)
+
 
 def modified_gram_schmidt(A):
     """
@@ -35,4 +41,6 @@ def modified_gram_schmidt(A):
             R[i, j] = np.dot(Q[:, i].T, U[:, j])
             U[:, j] = U[:, j] - R[i, j] * Q[:, i]
     return Q, R
+
+# NEW-----------------------------------------------
 
