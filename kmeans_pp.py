@@ -57,6 +57,7 @@ def kmeans_pp_main(K, MAX_ITER, obs):
     init_cent, init_indices = k_means_pp(obs, N, K, d)
     #print(','.join(str(x) for x in init_indices))  # DEL
     return ckm.api_func(init_cent, obs.tolist(), K, N, d, MAX_ITER)  # TODO, tom need to change C func to return cluster_map
+    # don't forget None case
 
 
 #kmeans_pp_main(3,300,np.array([[j for j in range(i,i+4)]for i in range(0,40,4)], np.float64))  # DEL
