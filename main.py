@@ -115,10 +115,10 @@ def main(is_random, n=None, k=None):
     write_data_file(points, cluster_labels)
     #TODO
     #run spectral
-    # write to clusters.txt
+    # write to clusters.txt (or from C?)
 
     #run K++
-    #write to clusters.txt
+    #write to clusters.txt (or from C?)
 
     #3d visio
 
