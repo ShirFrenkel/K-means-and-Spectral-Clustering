@@ -1,6 +1,10 @@
-import sklearn.datasets
+from sklearn.datasets import make_blobs
 import random
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+from matplotlib import cm
+
 
 DATA_FILE_NAME = "data.txt"
 CLUSTERS_FILE_NAME = "clusters.txt"
@@ -51,7 +55,33 @@ def write_data_file(points, cluster_labels):
     data = np.concatenate((points, cluster_labels[:, np.newaxis]), axis=1)  # axis = 1 means column-wise
     print(data)
     # write data to text file
-    np.savetxt(DATA_FILE_NAME, my_array, fmt="%4d", delimiter=",", newline="\n")  # TODO
+    #np.savetxt(DATA_FILE_NAME, my_array, fmt="%4d", delimiter=",", newline="\n")  # TODO
+
+def visualize(points, spec_cluster_map, kmeans_cluster_map ):
+    k = 10
+    colors = [cm.rainbow(i) for i in np.linspace(0, 1, k)]
+    # print(colors[0])
+
+    # x = np.linspace(0, 10, 30)
+    # y1 = np.sin(x)
+    # y2 = np.cos(x)
+    #
+    # plt.plot(x, y1, 'o', color='black')
+    # plt.plot(x, y2, 'o', color=colors[0])
+    #
+    # plt.show()
+
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
+
+    zdata = 15 * np.random.random(100)
+    xdata = np.sin(zdata) + 0.1 * np.random.randn(100)
+    ydata = np.cos(zdata) + 0.1 * np.randomd.randn(100)
+    ax.scatter3D(xdata, ydata, zdata, c='red')
+
+    plt.show()
+visualize(None,None,None)
+
 
 def main(is_random, n=None, k=None):
     """
@@ -75,7 +105,7 @@ def main(is_random, n=None, k=None):
     else:
         check_input(n,k)
 
-    points, cluster_labels = sklearn.datasets.make_blobs(n_samples=n, n_features=dim, centers=k)  # generate points
+    points, cluster_labels = make_blobs(n_samples=n, n_features=dim, centers=k)  # generate points
 
     write_data_file(points, cluster_labels)
     #TODO
@@ -91,7 +121,8 @@ def main(is_random, n=None, k=None):
 
 
 
-main(True)  # DEL
+#main(True)  # DEL
+
 
 
 
