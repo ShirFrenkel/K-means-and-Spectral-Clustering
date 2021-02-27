@@ -71,12 +71,40 @@ def modified_gram_schmidt(A):
 # print(np.dot(Q,R))
 
 # TOM'S FUNCTIONS
-def calc_weight(points):  # TODO
-    pass
-def normalized_graph_laplacian(W,D):  # TODO
-    pass
-def QR(A):  # TODO
-    return None, None  # eigenvalues, eignvectors (A,Q)
+
+
+def calc_weight(points):
+    """
+        :param points: nxd matrix, each row is a point
+        :return: w = The Weighted Adjacency Matrix. n dimensions square, symmetric and non-negative matrix
+        """
+    n = points.shape[0]
+    w = np.zeros((n, n))
+    for i in range(n):
+        for j in range(i + 1, n):  # W[i][i] is already set to zero as needed
+            exponent = np.linalg.norm(points[i] - points[j]) ** 2 / (-2)
+            w[i][j] = np.math.exp(exponent)
+            w[j][i] = w[i][j]
+    return w
+
+
+def normalized_graph_laplacian(W, D):
+    l_norm = np.identity(W.shape[0])
+    l_norm -= D @ W @ D
+    return l_norm
+
+
+def QR(A):
+    A1 = A.copy()  # creating a copy so we don't change A, if A is not used afterwards we can overwrite
+    n = A.shape[0]
+    Q1 = np.identity(n)
+    for i in range(n):
+        Q, R = modified_gram_schmidt(A1)
+        A1 = R @ Q
+        if converged(Q1, Q1 @ Q):
+            return A1, Q1
+        Q1 = Q1 @ Q
+    return A1, Q1   # A1 = eigenvalues, Q1 = eigenvectors
 
 
 def eigengap(eigenvalues):
