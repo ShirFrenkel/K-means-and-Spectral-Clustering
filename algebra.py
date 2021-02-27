@@ -140,11 +140,12 @@ def normalize_rows(M):
     """
     return M / np.linalg.norm(M, ord=2, axis=1, keepdims=True)
 
-def normalized_spectral_clustering(points):
+def normalized_spectral_clustering(points, is_random, k=None):
     """
     :param points: ndarry, shape(points) = (n,d) (n points with d dimensions)
-    :return: cluster_map
-    cluster_map[i] = list of the indices of points belonging to cluster i (count starts from 0)
+    if is_random, k is computed by eigengap heuristic, else, k is supplied as input
+    :return: point_cluster_map, k
+    point_cluster_map[i] = the index of the cluster that point i is belong to (count starts from 0)
     """
     W = calc_weight(points)
     Lnorm = normalized_graph_laplacian(W, diagonal_degree_matrix(W))
@@ -157,14 +158,15 @@ def normalized_spectral_clustering(points):
     eigenvalues = eigenvalues[indices]
     eignvectors = eignvectors[:, indices]
 
-    k = eigengap(eigenvalues)  # number of clusters for the clustering
+    if is_random:
+        k = eigengap(eigenvalues)  # number of clusters for the clustering
     U = eignvectors[:, 0:k]  # U.shape = (n,k)
     U_norm = normalize_rows(U)  # U_norm := U with normalized rows
     # Treating each row of U_norm as a point in Rk, cluster them into k clusters via the K-means algorithm:
-    cluster_map = kmeans_pp_main(k, MAX_ITER, U_norm)  # arguments meaning: K, MAX_ITER, obs matrix
-    # cluster_map[i] = list of the indices of U_norm's rows belonging to cluster i = ...
-    # ... = list of the indices of the original points belonging to cluster i
-    return cluster_map
+    point_cluster_map = kmeans_pp_main(k, MAX_ITER, U_norm)  # arguments meaning: K, MAX_ITER, obs matrix
+    # point_cluster_map[i] = the index of the cluster that U_norm's row i is belong to = ...
+    # ... = the index of the cluster that point i is belong to
+    return point_cluster_map, k
 
 
 

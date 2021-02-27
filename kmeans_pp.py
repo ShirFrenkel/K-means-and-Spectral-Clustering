@@ -50,13 +50,13 @@ def kmeans_pp_main(K, MAX_ITER, obs):
     :param MAX_ITER: the maximum number of iterations of the K-means algorithm, 0 < MAX_ITER
     :param obs: the observations (points) to be clustered, numpy matrix of shape (N,d)
     N = the number of observations, d = the dimension of each observation
-    :return: cluster_map
-    cluster_map[i] := list of the indices of points belonging to cluster i (count starts from 0)"""
+    :return: point_cluster_map
+    point_cluster_map[i] = the index of the cluster that point i is belong to (count starts from 0)"""
     N = obs.shape[0]
     d = obs.shape[1]
     init_cent, init_indices = k_means_pp(obs, N, K, d)
     #print(','.join(str(x) for x in init_indices))  # DEL
-    return ckm.api_func(init_cent, obs.tolist(), K, N, d, MAX_ITER)  # TODO, tom need to change C func to return cluster_map
+    return ckm.api_func(init_cent, obs.tolist(), K, N, d, MAX_ITER)  # TODO, tom need to change C func to return point_cluster_map
     # don't forget None case
 
 
