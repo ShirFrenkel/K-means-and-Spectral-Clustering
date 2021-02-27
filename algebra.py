@@ -1,5 +1,5 @@
 import numpy as np
-from kmeans_pp import kmeans_pp
+#from kmeans_pp import kmeans_pp
 
 MAX_ITER = 300
 
@@ -10,6 +10,7 @@ MAX_ITER = 300
 
 """
 NOTES:
+* add epsilon to prev pro (hw2)
 * use #DEL for temp things
 * use #TODO for future tasks
 
@@ -41,14 +42,15 @@ def diagonal_degree_matrix(W):
 
 def modified_gram_schmidt(A):
     """
-    :param A: (ndarray) square matrix
+    :param A: (ndarray) square matrix with order='F' (stored in column-major order)
+    * using fortran order (order='F') for efficient columns operations
     :return: Q = orthogonal matrix, R = upper triangular matrix (ndarrays)
     shape(A) = shape(Q) = shape(R) =(n,n)
     """
     U = A
     n = A.shape[0]
-    Q = np.zeros((n,n), dtype=np.float64)
-    R = np.zeros((n,n), dtype=np.float64)
+    Q = np.zeros((n, n), dtype=np.float64, order='F')
+    R = np.zeros((n, n), dtype=np.float64, order='F')
 
     for i in range(n):
         R[i, i] = np.linalg.norm(U[:, i], ord=2)
@@ -61,14 +63,15 @@ def modified_gram_schmidt(A):
             U[:, j] = U[:, j] - R[i, j] * Q[:, i]
     return Q, R
 
-# NEW-----------------------------------------------
 
-# #test gram_shmidt
-# A = np.array([[j for j in range(i,i+4)]for i in range(0,16,4)], np.float64)
-# Q, R=modified_gram_schmidt(A)
-# print(Q)
-# print(R)
-# print(np.dot(Q,R))
+#test gram_shmidt
+A = np.array([[j for j in range(i,i+4)]for i in range(0,16,4)], np.float64)
+print(A)
+Q, R=modified_gram_schmidt(A)
+print(A)
+print(Q)
+print(R)
+print(np.dot(Q,R))
 
 # TOM'S FUNCTIONS
 
@@ -153,7 +156,7 @@ def normalized_spectral_clustering(points):
     U = eignvectors[:, 0:k]  # U.shape = (n,k)
     U_norm = normalize_rows(U)  # U_norm := U with normalized rows
     # Treating each row of U_norm as a point in Rk, cluster them into k clusters via the K-means algorithm:
-    kmeans_pp(k, U_norm.shape[0], k, MAX_ITER, U_norm)  # arguments meaning: K, N, d, MAX_ITER, obs
+    #kmeans_pp(k, U_norm.shape[0], k, MAX_ITER, U_norm)  # arguments meaning: K, N, d, MAX_ITER, obs
     # read the output file... #TODO
 
 
