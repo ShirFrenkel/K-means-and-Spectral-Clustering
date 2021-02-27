@@ -48,10 +48,11 @@ def jaccard_measure():
     return 0  # TODO
 
 
-def visualize(points, k, point_cluster_maps):
+def visualize(points, k_original, k_algo, point_cluster_maps):
     """
     :param points: ndarry, shape(points) = (n,d) (n points with d dimensions)
-    :param k: amount of clusters
+    :param k_original: amount of centers the points were generated from
+    :param k_algo: k that was used for both algorithms
     :param point_cluster_maps:
     point_cluster_maps[0] - Normalized Spectral Clustering points map
     point_cluster_maps[1] - K-means Clustering points map
@@ -67,7 +68,7 @@ def visualize(points, k, point_cluster_maps):
 
     fig, ax = plt.subplots(1, 2, subplot_kw=dict(projection=projection))  # 2 subplots horizontally
 
-    colors = [cm.rainbow(i) for i in np.linspace(0, 1, k)]
+    colors = [cm.rainbow(i) for i in np.linspace(0, 1, k_algo)]
     titles = ["Normalized Spectral Clustering", "K-means"]
 
     for i in [0, 1]:
@@ -82,10 +83,10 @@ def visualize(points, k, point_cluster_maps):
 
 # test visualize
 A = np.array([[j for j in range(i,i+3)]for i in range(0,15,3)], np.float64)
-visualize(A,3,[[0,1,0,1,0],[2,2,2,1,1]])
+visualize(A,3,3,[[0,1,0,1,0],[2,2,2,1,1]])
 
 B = np.array([[j for j in range(i,i+2)]for i in range(0,10,2)], np.float64)
-visualize(B,3,[[0,1,0,1,0],[2,2,2,1,1]])
+visualize(B,3,3,[[0,1,0,1,0],[2,2,2,1,1]])
 
 
 def main(is_random, n=None, k=None):
