@@ -1,49 +1,7 @@
-# final version!
 import mykmeanssp as ckm
 import argparse
 import pandas as pd
 import numpy as np
-
-
-def read_inputs():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument("K", help="the number of clusters required", type=int)
-    parser.add_argument("N", help="the number of observations in the file", type=int)
-    parser.add_argument("d", help="the dimension of each observation and initial centroids", type=int)
-    parser.add_argument("MAX_ITER", help="the maximum number of iterations of the K-means algorithm", type=int)
-    parser.add_argument("filename", help="the observation file path", type=str)
-
-    args = parser.parse_args()
-    K = args.K
-    N = args.N
-    d = args.d
-    MAX_ITER = args.MAX_ITER
-    file_path = args.filename
-
-    # check inputs
-    if len(vars(args)) != 5:
-        print("number of arguments is incorrect (needs to be 5)")
-        exit(1)
-    if K >= N:
-        print("K cannot be greater or equal to N")
-        exit(1)
-    if d < 1 or MAX_ITER < 1 or K < 1:
-        print("one of the arguments given is not positive, shame on you")
-        exit(1)
-
-    # read file
-    obs_df = pd.read_csv(file_path, header=None, dtype=np.float64)
-
-    if N != obs_df.shape[0]:
-        print("Number of formal and actual observations does not match!")
-        exit(1)
-
-    if d != obs_df.shape[1]:
-        print("Number of formal and actual dimensions does not match!")
-        exit(1)
-
-    return K, N, d, MAX_ITER, obs_df
 
 
 def calc_D(mu, x):
@@ -86,18 +44,21 @@ def k_means_pp(points, N, k, d):
     return init_cent.tolist(), init_indices
 
 
-def kmeans_pp(K, N, d, MAX_ITER, obs):
-    #K, N, d, MAX_ITER, obs_df = read_inputs() # DEL
-    check_inputs()  # TODO
-    #TODO: obs is not df now
+def kmeans_pp_main(K, MAX_ITER, obs):
+    """
+    :param K: the number of clusters required, 0 < K < N (N defined later)
+    :param MAX_ITER: the maximum number of iterations of the K-means algorithm, 0 < MAX_ITER
+    :param obs: the observations (points) to be clustered, numpy matrix of shape (N,d)
+    N = the number of observations, d = the dimension of each observation
+    :return: cluster_map
+    cluster_map[i] := list of the indices of points belonging to cluster i (count starts from 0)"""
+    N = obs.shape[0]
+    d = obs.shape[1]
+    init_cent, init_indices = k_means_pp(obs, N, K, d)
+    #print(','.join(str(x) for x in init_indices))  # DEL
+    return ckm.api_func(init_cent, obs.tolist(), K, N, d, MAX_ITER)  # TODO, tom need to change C func to return cluster_map
+    # don't forget None case
 
-    init_cent, init_indices = k_means_pp(obs_df.to_numpy(), N, K, d)
-    print(','.join(str(x) for x in init_indices))
 
-    obs_lst = obs_df.values.tolist()  # for passing to C implementation
-
-    ckm.api_func(init_cent, obs_lst, K, N, d, MAX_ITER)
-
-
-
+#kmeans_pp_main(3,300,np.array([[j for j in range(i,i+4)]for i in range(0,40,4)], np.float64))  # DEL
 

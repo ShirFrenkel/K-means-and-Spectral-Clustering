@@ -1,5 +1,5 @@
 import numpy as np
-#from kmeans_pp import kmeans_pp
+from kmeans_pp import kmeans_pp_main
 
 MAX_ITER = 300
 
@@ -42,13 +42,13 @@ def diagonal_degree_matrix(W):
 
 def modified_gram_schmidt(A):
     """
-    :param A: (ndarray) square matrix with order='F' (stored in column-major order)
-    * using fortran order (order='F') for efficient columns operations
+    :param A: (ndarray) square matrix
     :return: Q = orthogonal matrix, R = upper triangular matrix (ndarrays)
     shape(A) = shape(Q) = shape(R) =(n,n)
+    * function uses fortran order (order='F') for efficient columns operations
     """
-    U = A
     n = A.shape[0]
+    U = np.copy(A, order='F')
     Q = np.zeros((n, n), dtype=np.float64, order='F')
     R = np.zeros((n, n), dtype=np.float64, order='F')
 
@@ -59,19 +59,23 @@ def modified_gram_schmidt(A):
             exit(1)
         Q[:, i] = U[:, i] / R[i, i]
         for j in range(i, n):
-            R[i, j] = np.dot(Q[:, i].T, U[:, j])
+            R[i, j] = Q[:, i].T @ U[:, j]
             U[:, j] = U[:, j] - R[i, j] * Q[:, i]
+    print(np.isfortran(Q))
+    print(np.isfortran(R))
     return Q, R
 
 
-#test gram_shmidt
-A = np.array([[j for j in range(i,i+4)]for i in range(0,16,4)], np.float64)
-print(A)
-Q, R=modified_gram_schmidt(A)
-print(A)
-print(Q)
-print(R)
-print(np.dot(Q,R))
+# #test gram_shmidt
+# A = np.array([[j for j in range(i,i+4)]for i in range(0,16,4)], np.float64)
+# print(A)
+# Q, R=modified_gram_schmidt(A)
+# print(A)
+# print(Q)
+# print(R)
+# print(np.isfortran(Q))
+# print(np.isfortran(R))
+# print((Q@R))
 
 # TOM'S FUNCTIONS
 
@@ -139,7 +143,8 @@ def normalize_rows(M):
 def normalized_spectral_clustering(points):
     """
     :param points: ndarry, shape(points) = (n,d) (n points with d dimensions)
-    :return:
+    :return: cluster_map
+    cluster_map[i] = list of the indices of points belonging to cluster i (count starts from 0)
     """
     W = calc_weight(points)
     Lnorm = normalized_graph_laplacian(W, diagonal_degree_matrix(W))
@@ -156,8 +161,13 @@ def normalized_spectral_clustering(points):
     U = eignvectors[:, 0:k]  # U.shape = (n,k)
     U_norm = normalize_rows(U)  # U_norm := U with normalized rows
     # Treating each row of U_norm as a point in Rk, cluster them into k clusters via the K-means algorithm:
-    #kmeans_pp(k, U_norm.shape[0], k, MAX_ITER, U_norm)  # arguments meaning: K, N, d, MAX_ITER, obs
-    # read the output file... #TODO
+    cluster_map = kmeans_pp_main(k, MAX_ITER, U_norm)  # arguments meaning: K, MAX_ITER, obs matrix
+    # cluster_map[i] = list of the indices of U_norm's rows belonging to cluster i = ...
+    # ... = list of the indices of the original points belonging to cluster i
+    return cluster_map
+
+
+
 
 
 
