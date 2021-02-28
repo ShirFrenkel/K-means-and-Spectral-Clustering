@@ -3,7 +3,6 @@
 /* written by Tom Rutenberg*/
 
 static void pList_to_cArray(PyObject*, Py_ssize_t, double**);
-static void print_output(double **, int , int);
 static void adding (double *c, double *, int);
 static void calculate_updated_centroids(double **, double **, int *, int, int, int);
 static double  distance(int, double *, double *);
