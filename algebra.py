@@ -90,7 +90,7 @@ def normalized_graph_laplacian(W, D):
     l_norm -= D @ W @ D
     return l_norm
 
-# SQR- add converged, I dont think we use A afterwards
+# SQR- I dont think we use A afterwards
 def QR(A):
     A1 = A.copy()  # creating a copy so we don't change A, if A is not used afterwards we can overwrite
     n = A.shape[0]
@@ -102,6 +102,12 @@ def QR(A):
             return A1, Q1
         Q1 = Q1 @ Q
     return A1, Q1   # A1 = eigenvalues, Q1 = eigenvectors
+
+
+def converged(a, b):
+    dif = np.absolute(a) - np.absolute(b)
+    dif = np.absolute(dif) <= 0.0001
+    return np.alltrue(dif)
 
 
 def eigengap(eigenvalues):

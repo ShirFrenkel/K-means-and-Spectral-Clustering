@@ -11,21 +11,6 @@ static void devide_to_clusters(double **, double **, int *, int, int, int);
 static int compare_centroids(double **, double **, int, int);
 
 
-static void print_output(double **centroids, int num_clusters, int dimensions){
-    int i;
-    int j;
-    printf("%f", centroids[0][0]);
-    for (j = 1 ; j < dimensions ; j++)
-            printf(",%f", centroids[0][j]);
-
-    for (i = 1 ; i < num_clusters ; i++){
-        printf("\n%f", centroids[i][0]);
-        for (j = 1 ; j < dimensions ; j++)
-            printf(",%f", centroids[i][j]);
-         }
-
-}
-
 static void adding (double *centroid, double *observation, int dimension) {
     int i;
     for (i = 0 ; i < dimension ; i++)
@@ -211,7 +196,11 @@ static PyObject* api_func(PyObject *self, PyObject *args){
         iteration++;
     }
 
-    print_output(centroids, num_clusters, dimensions);
+    PyObject* py_lst = PyList_New(num_observations); /* creating the PyObject which will be returned*/
+    for (i = 0 ; i < num_observations ; i++) {
+        PyObject* python_int = Py_BuildValue("i", cluster_tags[i]);
+        PyList_SetItem(py_lst, i, python_int);
+    }
 
     for (i = 0 ; i < num_clusters ; i++) {
         free(centroids[i]);
@@ -225,7 +214,7 @@ static PyObject* api_func(PyObject *self, PyObject *args){
     free(previous_centroids);
     free(cluster_tags);
 
-    Py_RETURN_NONE;
+    return py_lst;
 }
 
 #define FUNC(_flag, _name, _docstring) { #_name, (PyCFunction)_name, _flag, PyDoc_STR(_docstring) }
