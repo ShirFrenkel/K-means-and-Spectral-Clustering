@@ -74,7 +74,7 @@ def visualize(points, k_original, k_algo, maps_lst):
         ax[i].scatter(x, y, z, c=color)
         ax[i].set_title(maps_lst[i].name)
 
-    plt.figtext(0.3, 0, "insert an informative desc as requested!!!\n\n****")  # TODO
+    plt.figtext(0.3, 0, "insert an informative desc as requested!!!\n\n****")  # TODO, maybe use subtitle instead of this shit
     #plt.show()
     plt.savefig("clusters.pdf")
 

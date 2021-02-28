@@ -47,7 +47,7 @@ def modified_gram_schmidt(A):
             print("division by zero is undefined, exiting program")  # should not get here
             exit(1)
         Q[:, i] = U[:, i] / R[i, i]
-        for j in range(i, n):
+        for j in range(i, n):  # TODO- can do this without loops!
             R[i, j] = Q[:, i].T @ U[:, j]
             U[:, j] = U[:, j] - R[i, j] * Q[:, i]
     print(np.isfortran(Q))
@@ -66,9 +66,9 @@ def modified_gram_schmidt(A):
 # print(np.isfortran(R))
 # print((Q@R))
 
-# TOM'S FUNCTIONS
 
-
+# SQR- I this you can do this functions without loops, using np coding (working with matrices),
+# you can read kmeans_pp.calc_D that I wrote, maybe it can help you get this idea
 def calc_weight(points):
     """
         :param points: nxd matrix, each row is a point
@@ -83,13 +83,14 @@ def calc_weight(points):
             w[j][i] = w[i][j]
     return w
 
-
+# SQR- np.identity ruins the idea of 1 dim matrix that I've created,
+# maybe check if will be more efficient if you do scalar * rows and scalar* columns as we talked before
 def normalized_graph_laplacian(W, D):
     l_norm = np.identity(W.shape[0])
     l_norm -= D @ W @ D
     return l_norm
 
-
+# SQR- add converged, I dont think we use A afterwards
 def QR(A):
     A1 = A.copy()  # creating a copy so we don't change A, if A is not used afterwards we can overwrite
     n = A.shape[0]
