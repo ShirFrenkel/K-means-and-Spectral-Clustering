@@ -1,10 +1,9 @@
 from sklearn.datasets import make_blobs
 import random
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import cm
 import config
 from output import write_data_file, visualize
+from point_cluster_map import point_cluster_map  # need this for later
 
 """
 NOTES:
@@ -13,16 +12,6 @@ NOTES:
 - when is_random, is there an option that k > n? (if so, we have a problem...)
 - when writing to data.txt, do we need to write the whole num? or round it to some point ?
 """
-
-
-class point_cluster_map:
-    def __init__(self, name, map):
-        """
-        :param name: the name of the clustering algorithm that created the mapping
-        :param map: map[i] is the index of the cluster that point i is belong to
-        """
-        self.name = name
-        self.map = map
 
 
 def check_input(n, k):
@@ -61,19 +50,20 @@ def main(is_random, n=None, k=None):
         k = random.randint(config.K_MAX_CAPACITY[dim]//2, config.K_MAX_CAPACITY[dim])
 
     else:
-        check_input(n,k)
+        check_input(n, k)
 
     points, cluster_labels = make_blobs(n_samples=n, n_features=dim, centers=k)  # generate points
 
     write_data_file(points, cluster_labels)
     #TODO
     #run spectral
-    # write to clusters.txt (or from C?)
+    # write to clusters.txt (create this func in output.py)
 
     #run K++
-    #write to clusters.txt (or from C?)
+    #write to clusters.txt
 
     #3d visio
+    # visualize(...)
 
     #the end?
 

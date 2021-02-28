@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import config
+from point_cluster_map import point_cluster_map
 
 def write_data_file(points, cluster_labels):
     #print(points)
