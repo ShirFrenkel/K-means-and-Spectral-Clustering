@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
+
 MAX_ITER = 300
 
 DATA_FILE_NAME = "data.txt"
@@ -20,6 +21,16 @@ NOTES:
 - when is_random, is there an option that k > n? (if so, we have a problem...)
 - when writing to data.txt, do we need to write the whole num? or round it to some point ?
 """
+
+
+class point_cluster_map:
+    def __init__(self, name, map):
+        """
+        :param name: the name of the clustering algorithm that created the mapping
+        :param map: map[i] is the index of the cluster that point i is belong to
+        """
+        self.name = name
+        self.map = map
 
 
 def check_input(n, k):
@@ -48,16 +59,13 @@ def jaccard_measure():
     return 0  # TODO
 
 
-def visualize(points, k_original, k_algo, point_cluster_maps):
+def visualize(points, k_original, k_algo, maps_lst):
     """
     :param points: ndarry, shape(points) = (n,d) (n points with d dimensions)
     :param k_original: amount of centers the points were generated from
     :param k_algo: k that was used for both algorithms
-    :param point_cluster_maps:
-    point_cluster_maps[0] - Normalized Spectral Clustering points map
-    point_cluster_maps[1] - K-means Clustering points map
-    (lst is points map if lst[i] is the index of the cluster that point i is belong to)
-    @post: creates clusters.pdf
+    :param maps_lst: lst of point_cluster_map objects matching the input's points
+    @post: creates clusters.pdf with axis for each map in maps_lst ordered horizontally by the maps_lst order
     """
     # TODO ? change to T order
     dim = points.shape[1]
@@ -66,27 +74,31 @@ def visualize(points, k_original, k_algo, point_cluster_maps):
     z = points[:, 2] if dim == 3 else None
     projection = '3d' if dim == 3 else None
 
-    fig, ax = plt.subplots(1, 2, subplot_kw=dict(projection=projection))  # 2 subplots horizontally
+    fig, ax = plt.subplots(1, len(maps_lst), subplot_kw=dict(projection=projection))  # subplots horizontally
 
     colors = [cm.rainbow(i) for i in np.linspace(0, 1, k_algo)]
-    titles = ["Normalized Spectral Clustering", "K-means"]
 
-    for i in [0, 1]:
-        color = [colors[cluster] for cluster in point_cluster_maps[i]]  # color for each point by it's cluster
+    for i in range(len(maps_lst)):
+        color = [colors[cluster] for cluster in maps_lst[i].map]  # color for each point by it's cluster
         ax[i].scatter(x, y, z, c=color)
-        ax[i].set_title(titles[i])
+        ax[i].set_title(maps_lst[i].name)
 
     plt.figtext(0.3, 0, "insert an informative desc as requested!!!\n\n****")  # TODO
-    plt.show()
-    #plt.savefig("clusters.pdf")
+    #plt.show()
+    plt.savefig("clusters.pdf")
 
 
 # test visualize
+spec = point_cluster_map("Normalized Spectral Clustering", [0,1,0,1,0])
+kmeans = point_cluster_map("K-means", [2,2,2,1,1])
+shir_algo = point_cluster_map("another algo", [0,0,0,0,0])
+lst_map = [spec, kmeans, shir_algo]
+
 A = np.array([[j for j in range(i,i+3)]for i in range(0,15,3)], np.float64)
-visualize(A,3,3,[[0,1,0,1,0],[2,2,2,1,1]])
+visualize(A,3,3,lst_map)
 
 B = np.array([[j for j in range(i,i+2)]for i in range(0,10,2)], np.float64)
-visualize(B,3,3,[[0,1,0,1,0],[2,2,2,1,1]])
+visualize(B,3,3,lst_map)
 
 
 def main(is_random, n=None, k=None):
@@ -128,6 +140,10 @@ def main(is_random, n=None, k=None):
 
 
 main(True)  # DEL
+
+
+
+
 
 
 
