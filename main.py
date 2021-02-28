@@ -3,16 +3,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
-
-
-MAX_ITER = 300
-
-DATA_FILE_NAME = "data.txt"
-CLUSTERS_FILE_NAME = "clusters.txt"
-
-# maximum capacities
-N_MAX_CAPACITY = {2: 100, 3: 50}  # TODO
-K_MAX_CAPACITY = {2: 10, 3: 5}
+import config
 
 """
 NOTES:
@@ -51,7 +42,7 @@ def write_data_file(points, cluster_labels):
     data = np.concatenate((points, cluster_labels[:, np.newaxis]), axis=1)  # axis = 1 means column-wise
     #print(data)
     # write data to text file
-    np.savetxt(DATA_FILE_NAME, data, delimiter=",", newline="\n")
+    np.savetxt(config.DATA_FILE_NAME, data, delimiter=",", newline="\n")
     #TODO not sure what is the accuracy level we need for points & need to fix integer apears as float
 
 
@@ -112,13 +103,13 @@ def main(is_random, n=None, k=None):
     # print max capacities
     for i in [2,3]:
         print(f'maximum capacity for {i}-dimensional data points:\n'
-              f'\tnumber of centers (K) = {K_MAX_CAPACITY[i]}\n'
-              f'\tnumber of data points (N) = {N_MAX_CAPACITY[i]}')
+              f'\tnumber of centers (K) = {config.K_MAX_CAPACITY[i]}\n'
+              f'\tnumber of data points (N) = {config.N_MAX_CAPACITY[i]}')
 
     dim = random.randint(2, 3)  # dimensions for each point
     if is_random:
-        n = random.randint(N_MAX_CAPACITY[dim]//2, N_MAX_CAPACITY[dim])
-        k = random.randint(K_MAX_CAPACITY[dim]//2, K_MAX_CAPACITY[dim])
+        n = random.randint(config.N_MAX_CAPACITY[dim]//2, config.N_MAX_CAPACITY[dim])
+        k = random.randint(config.K_MAX_CAPACITY[dim]//2, config.K_MAX_CAPACITY[dim])
 
     else:
         check_input(n,k)

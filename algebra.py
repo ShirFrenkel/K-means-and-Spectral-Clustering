@@ -1,12 +1,6 @@
 import numpy as np
 from kmeans_pp import kmeans_pp_main
-
-MAX_ITER = 300
-
-# TODO The Eigengap Heuristic
-# TODO Algorithm 3 The Normalized Spectral Clustering Algorithm
-
-
+import config
 
 """
 NOTES:
@@ -18,14 +12,9 @@ for TOM:
 * for computing l2-norm, can use np.linalg.norm(vector, ord=2), no need to use my implementation (gonna delete later)
 
 for Shir:
-* modified_gram_schmidt- maybe working with transposed matrix is cheaper? is a[i] cheaper than a[:,i]?
-* what to do if there is an error? just exit?
+
 """
 
-# #DEL
-# # if you want to calc ||a-b||, just call calc_l2_norm(a-b)  # DEL
-# def calc_l2_norm(a):
-#     return np.sqrt(np.sum(a ** 2))
 
 #for computing l2-norm, can use np.linalg.norm(vector, ord=2)  # DEL
 
@@ -163,7 +152,7 @@ def normalized_spectral_clustering(points, is_random, k=None):
     U = eignvectors[:, 0:k]  # U.shape = (n,k)
     U_norm = normalize_rows(U)  # U_norm := U with normalized rows
     # Treating each row of U_norm as a point in Rk, cluster them into k clusters via the K-means algorithm:
-    point_cluster_map = kmeans_pp_main(k, MAX_ITER, U_norm)  # arguments meaning: K, MAX_ITER, obs matrix
+    point_cluster_map = kmeans_pp_main(k, config.MAX_ITER, U_norm)  # arguments meaning: K, MAX_ITER, obs matrix
     # point_cluster_map[i] = the index of the cluster that U_norm's row i is belong to = ...
     # ... = the index of the cluster that point i is belong to
     return point_cluster_map, k
