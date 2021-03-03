@@ -47,11 +47,13 @@ def modified_gram_schmidt(A):
             print("division by zero is undefined, exiting program")  # should not get here
             exit(1)
         Q[:, i] = U[:, i] / R[i, i]
-        for j in range(i, n):  # TODO- can do this without loops!
-            R[i, j] = Q[:, i].T @ U[:, j]
-            U[:, j] = U[:, j] - R[i, j] * Q[:, i]
-    print(np.isfortran(Q))
-    print(np.isfortran(R))
+        # for j in range(i, n):  # TODO- can do this without loops!
+        #     R[i, j] = Q[:, i].T @ U[:, j]
+        #     U[:, j] = U[:, j] - R[i, j] * Q[:, i]
+        R[i, i:n] = Q[:, i] @ U[:, i:n]
+        U[:, i:n] = U[:, i:n] - (R[np.newaxis, i,  i:n] * Q[:, i, np.newaxis])  # TODO find what is wrong with this
+        # U[:, i:n] = U[:, i:n] - (R[i,  i:n])[np.newaxis, :] * (Q[:, i])[:, np.newaxis]
+
     return Q, R
 
 
@@ -65,6 +67,10 @@ def modified_gram_schmidt(A):
 # print(np.isfortran(Q))
 # print(np.isfortran(R))
 # print((Q@R))
+#
+# q,r = np.linalg.qr(A, mode='reduced')
+# print(q)
+# print(r)
 
 
 # SQR- I this you can do this functions without loops, using np coding (working with matrices),
@@ -140,7 +146,7 @@ def normalized_spectral_clustering(points, is_random, k=None):
     """
     :param points: ndarry, shape(points) = (n,d) (n points with d dimensions)
     if is_random, k is computed by eigengap heuristic, else, k is supplied as input
-    :return: point_cluster_map, k
+    :return: point_cluster_map, k !!! or None, k if error occurred !!!
     point_cluster_map[i] = the index of the cluster that point i is belong to (count starts from 0)
     """
     W = calc_weight(points)

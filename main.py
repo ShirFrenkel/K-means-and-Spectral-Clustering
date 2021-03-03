@@ -11,6 +11,7 @@ NOTES:
 - do we care if int round is down and not up?
 - when is_random, is there an option that k > n? (if so, we have a problem...)
 - when writing to data.txt, do we need to write the whole num? or round it to some point ?
+- check error in C case 
 """
 
 
@@ -56,10 +57,10 @@ def main(is_random, n=None, k=None):
 
     write_data_file(points, cluster_labels)
     #TODO
-    #run spectral
+    #run spectral dont forget None case!
     # write to clusters.txt (create this func in output.py)
 
-    #run K++
+    #run K++, dont forget None case!
     #write to clusters.txt
 
     #3d visio

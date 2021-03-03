@@ -30,3 +30,8 @@ visualize(B,3,3,lst_map)
 
 
 #%%
+import numpy as np
+a = np.array([i for i in range(8)])
+b = np.array([i for i in range(4)])
+a[np.newaxis, :] + b[:, np.newaxis]
+
