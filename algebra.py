@@ -47,30 +47,29 @@ def modified_gram_schmidt(A):
             print("division by zero is undefined, exiting program")  # should not get here
             exit(1)
         Q[:, i] = U[:, i] / R[i, i]
-        # for j in range(i, n):  # TODO- can do this without loops!
-        #     R[i, j] = Q[:, i].T @ U[:, j]
-        #     U[:, j] = U[:, j] - R[i, j] * Q[:, i]
-        R[i, i:n] = Q[:, i] @ U[:, i:n]
-        U[:, i:n] = U[:, i:n] - (R[np.newaxis, i,  i:n] * Q[:, i, np.newaxis])  # TODO find what is wrong with this
+        for j in range(i+1, n):  # TODO- can do this without loops!
+            R[i, j] = Q[:, i].T @ U[:, j]
+            U[:, j] = U[:, j] - R[i, j] * Q[:, i]
+        # R[i, i+1:] = Q[:, i] @ U[:, i+1:]
+        # U[:, i+1:] = U[:, i+1:] - (R[np.newaxis, i,  i+1:] * Q[:, i, np.newaxis])  # TODO find what is wrong with this
         # U[:, i:n] = U[:, i:n] - (R[i,  i:n])[np.newaxis, :] * (Q[:, i])[:, np.newaxis]
 
     return Q, R
 
 
-# #test gram_shmidt
-# A = np.array([[j for j in range(i,i+4)]for i in range(0,16,4)], np.float64)
-# print(A)
-# Q, R=modified_gram_schmidt(A)
-# print(A)
-# print(Q)
-# print(R)
+#test gram_shmidt
+A = np.array([[j for j in range(i,i+4)]for i in range(0,16,4)], np.float64)
+print(A)
+Q, R=modified_gram_schmidt(A)
+print(Q)
+print(R)
 # print(np.isfortran(Q))
 # print(np.isfortran(R))
-# print((Q@R))
-#
-# q,r = np.linalg.qr(A, mode='reduced')
-# print(q)
-# print(r)
+print((Q@R))
+
+q,r = np.linalg.qr(A, mode='reduced')
+print(q)
+print(r)
 
 
 # SQR- I this you can do this functions without loops, using np coding (working with matrices),
