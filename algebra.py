@@ -31,7 +31,35 @@ def diagonal_degree_matrix(W):
 
 def modified_gram_schmidt(A):
     """
-    :param A: (ndarray) square matrix
+    :param A: (ndarray) square matrix with dtype = np.float64
+    :return: Q = orthogonal matrix, R = upper triangular matrix (ndarrays)
+    shape(A) = shape(Q) = shape(R) =(n,n)
+    * function uses fortran order (order='F') for efficient columns operations
+    """
+    n = A.shape[0]
+    U = np.copy(A, order='F')
+    Q = np.zeros((n, n), dtype=np.float64, order='F')
+    R = np.zeros((n, n), dtype=np.float64, order='F')
+
+    for i in range(n):
+        R[i, i] = np.linalg.norm(U[:, i], ord=2)
+        if R[i, i] == 0:
+            print("division by zero is undefined, exiting program")  # should not get here
+            exit(1)
+        Q[:, i] = U[:, i] / R[i, i]
+        # for j in range(i+1, n):  # TODO- can do this without loops!
+        #     R[i, j] = Q[:, i] @ U[:, j]
+        #     U[:, j] = U[:, j] - R[i, j] * Q[:, i]
+        R[i, i+1:] = Q[:, i] @ U[:, i+1:]
+        U[:, i+1:] = U[:, i+1:] - (R[np.newaxis, i,  i+1:] * Q[:, i, np.newaxis])  # TODO find what is wrong with this
+        # U[:, i:n] = U[:, i:n] - (R[i,  i:n])[np.newaxis, :] * (Q[:, i])[:, np.newaxis]
+
+    return Q, R
+
+
+def modified_gram_schmidt_for(A):  # DEL
+    """
+    :param A: (ndarray) square matrix with dtype = np.float64
     :return: Q = orthogonal matrix, R = upper triangular matrix (ndarrays)
     shape(A) = shape(Q) = shape(R) =(n,n)
     * function uses fortran order (order='F') for efficient columns operations
@@ -48,29 +76,31 @@ def modified_gram_schmidt(A):
             exit(1)
         Q[:, i] = U[:, i] / R[i, i]
         for j in range(i+1, n):  # TODO- can do this without loops!
-            R[i, j] = Q[:, i].T @ U[:, j]
+            R[i, j] = Q[:, i] @ U[:, j]
             U[:, j] = U[:, j] - R[i, j] * Q[:, i]
-        # R[i, i+1:] = Q[:, i] @ U[:, i+1:]
-        # U[:, i+1:] = U[:, i+1:] - (R[np.newaxis, i,  i+1:] * Q[:, i, np.newaxis])  # TODO find what is wrong with this
+
         # U[:, i:n] = U[:, i:n] - (R[i,  i:n])[np.newaxis, :] * (Q[:, i])[:, np.newaxis]
 
     return Q, R
 
 
-#test gram_shmidt
-A = np.array([[j for j in range(i,i+4)]for i in range(0,16,4)], np.float64)
-print(A)
-Q, R=modified_gram_schmidt(A)
-print(Q)
-print(R)
-# print(np.isfortran(Q))
-# print(np.isfortran(R))
-print((Q@R))
-
-q,r = np.linalg.qr(A, mode='reduced')
-print(q)
-print(r)
-
+# #test gram_shmidt
+# A = np.array([[j for j in range(i,i+4)]for i in range(0,16,4)], np.float64)
+# A = np.array([[1,2,3],[10,20,30],[11,5,7]], np.float64)
+# print(A)
+# Q, R=modified_gram_schmidt(A)
+# print(Q)
+# print(R)
+# # print(np.isfortran(Q))
+# # print(np.isfortran(R))
+# print((Q@R))
+#
+# q,r = np.linalg.qr(A, mode='reduced')
+# #q,r = modified_gram_schmidt_for(A)
+# # print(q)
+# # print(r)
+# print(np.absolute(R)-np.absolute(r))
+# print(np.absolute(Q)-np.absolute(q))
 
 # SQR- I this you can do this functions without loops, using np coding (working with matrices),
 # you can read kmeans_pp.calc_D that I wrote, maybe it can help you get this idea
