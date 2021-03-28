@@ -106,14 +106,8 @@ def calc_weight(points):
         :param points: nxd matrix, each row is a point
         :return: w = The Weighted Adjacency Matrix. n dimensions square, symmetric and non-negative matrix
         """
-    n = points.shape[0]
-    w = np.zeros((n, n))
-    for i in range(n):
-        for j in range(i + 1, n):  # W[i][i] is already set to zero as needed
-            exponent = np.linalg.norm(points[i] - points[j]) ** 2 / (-2)
-            w[i][j] = np.math.exp(exponent)
-            w[j][i] = w[i][j]
-    return w
+    w = ((points - points[:, np.newaxis]) ** 2).sum(axis=2)
+    return np.exp(w / -2) - np.identity(w.shape[0])
 
 # SQR- np.identity ruins the idea of 1 dim matrix that I've created,
 # maybe check if will be more efficient if you do scalar * rows and scalar* columns as we talked before
