@@ -51,7 +51,7 @@ def calc_weight(points):
         :param points: nxd matrix, each row is a point
         :return: w = The Weighted Adjacency Matrix. n dimensions square, symmetric and non-negative matrix
         """
-    w = ((points - points[:, np.newaxis]) ** 2).sum(axis=2)
+    w = np.linalg.norm((points - points[:, np.newaxis]), ord=2, axis=2)
     return np.exp(w / -2) - np.identity(w.shape[0])
 
 
