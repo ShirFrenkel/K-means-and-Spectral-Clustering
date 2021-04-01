@@ -11,14 +11,7 @@ NOTES:
 for TOM:
 * for computing l2-norm, can use np.linalg.norm(vector, ord=2), no need to use my implementation (gonna delete later)
 
-for Shir:
-
 """
-
-
-#for computing l2-norm, can use np.linalg.norm(vector, ord=2)  # DEL
-
-# a = np.arange(16).reshape(4,4)
 
 
 def diagonal_degree_matrix(W):
@@ -53,54 +46,6 @@ def modified_gram_schmidt(A):
     return Q, R
 
 
-# def modified_gram_schmidt_for(A):  # DEL
-#     """
-#     :param A: (ndarray) square matrix with dtype = np.float64
-#     :return: Q = orthogonal matrix, R = upper triangular matrix (ndarrays)
-#     shape(A) = shape(Q) = shape(R) =(n,n)
-#     * function uses fortran order (order='F') for efficient columns operations
-#     """
-#     n = A.shape[0]
-#     U = np.copy(A, order='F')
-#     Q = np.zeros((n, n), dtype=np.float64, order='F')
-#     R = np.zeros((n, n), dtype=np.float64, order='F')
-#
-#     for i in range(n):
-#         R[i, i] = np.linalg.norm(U[:, i], ord=2)
-#         if R[i, i] == 0:
-#             print("division by zero is undefined, exiting program")  # should not get here
-#             exit(1)
-#         Q[:, i] = U[:, i] / R[i, i]
-#         for j in range(i+1, n):  # TODO- can do this without loops!
-#             R[i, j] = Q[:, i] @ U[:, j]
-#             U[:, j] = U[:, j] - R[i, j] * Q[:, i]
-#
-#         # U[:, i:n] = U[:, i:n] - (R[i,  i:n])[np.newaxis, :] * (Q[:, i])[:, np.newaxis]
-#
-#     return Q, R
-
-
-# #test gram_shmidt
-# A = np.array([[j for j in range(i,i+4)]for i in range(0,16,4)], np.float64)
-# A = np.array([[1,2,3],[10,20,30],[11,5,7]], np.float64)
-# A = np.array(100 * np.random.ranf(36), dtype=np.float64).reshape((6, 6))
-# print(A)
-# Q, R=modified_gram_schmidt(A)
-# print(Q)
-# print(R)
-# # print(np.isfortran(Q))
-# # print(np.isfortran(R))
-# print((Q@R))
-#
-# q,r = np.linalg.qr(A, mode='reduced')
-# #q,r = modified_gram_schmidt_for(A)
-# # print(q)
-# # print(r)
-# print(np.absolute(R)-np.absolute(r))
-# print(np.absolute(Q)-np.absolute(q))
-
-# SQR- I this you can do this functions without loops, using np coding (working with matrices),
-# you can read kmeans_pp.calc_D that I wrote, maybe it can help you get this idea
 def calc_weight(points):
     """
         :param points: nxd matrix, each row is a point
@@ -109,8 +54,7 @@ def calc_weight(points):
     w = ((points - points[:, np.newaxis]) ** 2).sum(axis=2)
     return np.exp(w / -2) - np.identity(w.shape[0])
 
-# SQR- np.identity ruins the idea of 1 dim matrix that I've created,
-# maybe check if will be more efficient if you do scalar * rows and scalar* columns as we talked before
+
 def normalized_graph_laplacian(W, D):
     l_norm = np.identity(W.shape[0])
     l_norm -= D @ W @ D
@@ -147,13 +91,6 @@ def eigengap(eigenvalues):
     # no need for abs because eigenvalues are sorted by increasing value
     return int(np.argmax(delta))
 
-#DEL
-# a = np.array([2,6.4,10.8,11,11,11,11,2,11,11,11], np.float64)
-# indices = np.argsort(a)  # indices that would sort hte matrices by increasing eigenvalues
-# a = a[indices]
-# print(a)
-# print(eigengap(a))
-
 
 def normalize_rows(M):
     """
@@ -189,11 +126,3 @@ def normalized_spectral_clustering(points, is_random, k=None):
     # point_cluster_map[i] = the index of the cluster that U_norm's row i is belong to = ...
     # ... = the index of the cluster that point i is belong to
     return point_cluster_map, k
-
-
-
-
-
-
-
-
