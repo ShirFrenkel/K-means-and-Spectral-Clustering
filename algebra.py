@@ -9,7 +9,9 @@ NOTES:
 * use #TODO for future tasks
 
 for TOM:
-* for computing l2-norm, can use np.linalg.norm(vector, ord=2), no need to use my implementation (gonna delete later)
+
+
+for Shir:
 
 """
 
@@ -19,7 +21,7 @@ def diagonal_degree_matrix(W):
     W = The Weighted Adjacency Matrix
     :return: D, D[i] = sum(W[i])**(-1/2)
     """
-    return np.power(np.sum(W, axis=1), -0.5)
+    return np.diag(np.power(np.sum(W, axis=1), -0.5))
 
 
 def modified_gram_schmidt(A):
