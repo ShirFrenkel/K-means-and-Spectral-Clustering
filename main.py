@@ -4,6 +4,8 @@ import numpy as np
 import config
 from output import write_data_file, visualize
 from point_cluster_map import point_cluster_map  # need this for later
+from algebra import normalized_spectral_clustering
+from kmeans_pp import kmeans_pp_main
 
 """
 NOTES:
@@ -56,11 +58,20 @@ def main(is_random, n=None, k=None):
     points, cluster_labels = make_blobs(n_samples=n, n_features=dim, centers=k)  # generate points
 
     write_data_file(points, cluster_labels)
-    #TODO
-    #run spectral dont forget None case!
+
+    spectral_cluster_tags, k = normalized_spectral_clustering(points, is_random, k)
+    if spectral_cluster_tags is None:
+        print("An error occurred during normalized spectrael clustring, shutting down")
+        exit(1)
+
+    kmeans_cluster_tags = kmeans_pp_main(k, config.MAX_ITER, points)
+    if kmeans_cluster_tags is None:
+        print("An error occurred during kmeans++, shutting down")
+        exit(1)
+
+    # TODO
     # write to clusters.txt (create this func in output.py)
 
-    #run K++, dont forget None case!
     #write to clusters.txt
 
     #3d visio

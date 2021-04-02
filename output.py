@@ -13,6 +13,17 @@ def write_data_file(points, cluster_labels):
     np.savetxt(config.DATA_FILE_NAME, data, delimiter=",", newline="\n")
     #TODO not sure what is the accuracy level we need for points & need to fix integer apears as float
 
+def write_clusters_file(spectral_tags, kmeans_tags, k)
+    """
+        :param spectral_tags: list of cluster classification by the Normalized Spectral Clustering algorithm.
+        :param kmeans_tags: list of cluster classification by the kmeans++ algorithm.
+        :param k: the number of clusters to which we classified our date.
+        @post: writing to clusters.txt in the format mentioned in the assigment.
+    """
+
+
+
+
 
 def visualize(points, k_original, k_algo, maps_lst):
     """
