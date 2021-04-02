@@ -58,6 +58,11 @@ def calc_weight(points):
 
 
 def normalized_graph_laplacian(W, D):
+    """
+        :param D: The Diagonal Degree Matrix raised to the power of -0.5
+        :param W: The Weighted Adjacency Matrix
+        :return: l_norm = The normalized graph Laplacian
+    """
     l_norm = np.identity(W.shape[0])
     l_norm -= D @ W @ D
     return l_norm
@@ -66,7 +71,7 @@ def normalized_graph_laplacian(W, D):
 def QR(A):
     A1 = A.copy()  # creating a copy so we don't change A, if A is not used afterwards we can overwrite
     n = A.shape[0]
-    Q1 = np.identity(n)
+    Q1 = np.identity(n, dtype=np.float64)
     for i in range(n):
         Q, R = modified_gram_schmidt(A1)
         A1 = R @ Q
