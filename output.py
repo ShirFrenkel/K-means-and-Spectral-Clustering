@@ -20,6 +20,13 @@ def write_clusters_file(spectral_tags, kmeans_tags, k)
         :param k: the number of clusters to which we classified our date.
         @post: writing to clusters.txt in the format mentioned in the assigment.
     """
+    n = len(spectral_tags)
+    spectral_for_print = []
+    kmeans_for_print = []
+    for i in range(k):
+        spectral_for_print.append([])
+        kmeans_for_print.append([])
+
 
 
 
