@@ -39,12 +39,10 @@ def convert_cluster_oriented(cluster_tags, k):
         :param k: the number of clusters.
         :return: list of strings in which converted[i] represents the points belonging to cluster i separated by ','.
     """
-    converted = []
-    for i in range(k):
-        converted.append([])  # SCR- looks nicer: converted = [[] for i in range(k)]
+    converted = [[] for i in range(k)]
     for i in range(len(cluster_tags)):
-        converted[cluster_tags[i]].append(i)  # SCR- you can append it as str and not change it later
-    converted = [','.join([str(num) for num in cluster]) for cluster in converted]
+        converted[cluster_tags[i]].append(str(i))
+    converted = [','.join([num for num in cluster]) for cluster in converted]
     return converted
 
 
