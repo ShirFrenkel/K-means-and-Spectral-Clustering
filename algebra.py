@@ -21,7 +21,7 @@ def diagonal_degree_matrix(W):
     W = The Weighted Adjacency Matrix
     :return: D, D[i] = sum(W[i])**(-1/2)
     """
-    return np.diag(np.power(np.sum(W, axis=1), -0.5))
+    return np.power(np.sum(W, axis=1), -0.5)
 
 
 def modified_gram_schmidt(A):
@@ -59,13 +59,13 @@ def calc_weight(points):
 
 def normalized_graph_laplacian(W, D):
     """
-        :param D: The Diagonal Degree Matrix raised to the power of -0.5
+        :param D: The Diagonal Degree Matrix raised to the power of -0.5 (represented as 1D vector!)
         :param W: The Weighted Adjacency Matrix
         :return: l_norm = The normalized graph Laplacian
     """
-    l_norm = np.identity(W.shape[0])
-    l_norm -= D @ W @ D
+    l_norm = np.identity(W.shape[0]) - (D[np.newaxis, :] * W * D[:, np.newaxis])
     return l_norm
+
 
 # SQR- I dont think we use A afterwards
 def QR(A):

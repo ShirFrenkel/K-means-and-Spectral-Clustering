@@ -41,9 +41,9 @@ def convert_cluster_oriented(cluster_tags, k):
     """
     converted = []
     for i in range(k):
-        converted.append([])
+        converted.append([])  # SCR- looks nicer: converted = [[] for i in range(k)]
     for i in range(len(cluster_tags)):
-        converted[cluster_tags[i]].append(i)
+        converted[cluster_tags[i]].append(i)  # SCR- you can append it as str and not change it later
     converted = [','.join([str(num) for num in cluster]) for cluster in converted]
     return converted
 
