@@ -2,7 +2,7 @@ from sklearn.datasets import make_blobs
 import random
 import numpy as np
 import config
-from output import write_data_file, visualize
+from output import write_data_file, visualize, write_clusters_file
 from point_cluster_map import point_cluster_map  # need this for later
 from algebra import normalized_spectral_clustering
 from kmeans_pp import kmeans_pp_main
@@ -69,10 +69,9 @@ def main(is_random, n=None, k=None):
         print("An error occurred during kmeans++, shutting down")
         exit(1)
 
-    # TODO
-    # write to clusters.txt (create this func in output.py)
+    write_clusters_file(spectral_cluster_tags, kmeans_cluster_tags, k)
 
-    #write to clusters.txt
+    # TODO
 
     #3d visio
     # visualize(...)
