@@ -37,7 +37,7 @@ def write_clusters_file(spectral_tags, kmeans_tags, k):
         string_to_print += ('\n' + cluster)
     for cluster in kmeans_for_print:
         string_to_print += ('\n' + cluster)
-    f = open("clusters.txt", "w")
+    f = open(config.CLUSTERS_FILE_NAME, "w")
     f.write(string_to_print)
     f.close()
 
