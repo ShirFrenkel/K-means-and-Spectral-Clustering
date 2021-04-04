@@ -13,23 +13,39 @@ def write_data_file(points, cluster_labels):
     np.savetxt(config.DATA_FILE_NAME, data, delimiter=",", newline="\n")
     #TODO not sure what is the accuracy level we need for points & need to fix integer apears as float
 
-def write_clusters_file(spectral_tags, kmeans_tags, k)
+
+def write_clusters_file(spectral_tags, kmeans_tags, k):
     """
         :param spectral_tags: list of cluster classification by the Normalized Spectral Clustering algorithm.
         :param kmeans_tags: list of cluster classification by the kmeans++ algorithm.
         :param k: the number of clusters to which we classified our date.
         @post: writing to clusters.txt in the format mentioned in the assigment.
     """
-    n = len(spectral_tags)
-    spectral_for_print = []
-    kmeans_for_print = []
+    spectral_for_print = convert_cluster_oriented(spectral_tags, k)
+    kmeans_for_print = convert_cluster_oriented(kmeans_tags, k)
+    string_to_print = str(k)
+    for cluster in spectral_for_print:
+        string_to_print += ('\n' + cluster)
+    for cluster in kmeans_for_print:
+        string_to_print += ('\n' + cluster)
+    f = open("clusters.txt", "w")
+    f.write(string_to_print)
+    f.close()
+
+
+def convert_cluster_oriented(cluster_tags, k):
+    """
+        :param cluster_tags: an array of n ints where cluster_tags[i] is the cluster number point i belongs to.
+        :param k: the number of clusters.
+        :return: list of strings in which converted[i] represents the points belonging to cluster i separated by ','.
+    """
+    converted = []
     for i in range(k):
-        spectral_for_print.append([])
-        kmeans_for_print.append([])
-
-
-
-
+        converted.append([])
+    for i in range(len(cluster_tags)):
+        converted[cluster_tags[i]].append(i)
+    converted = [','.join([str(num) for num in cluster]) for cluster in converted]
+    return converted
 
 
 def visualize(points, k_original, k_algo, maps_lst):
