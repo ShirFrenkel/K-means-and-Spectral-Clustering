@@ -55,6 +55,70 @@ def convert_cluster_oriented(cluster_tags, k):
     return converted
 
 
+def jaccard_measure(cluster_labels, algo_cluster_tags, k):
+    """
+        :param cluster_labels: the cluster labels from make_blobs method - our truth standard.
+        :param algo_cluster_tags: an algorithms output of cluster classification.
+        :param k: the number of clusters.
+        :return: the relation between the number of intersecting pairs in both cases and the union of pairs.
+    """
+
+    algo_list_clusters = to_clusters_list(algo_cluster_tags, k)
+    algorithm_pairs, intersecting_pairs = count_pairs(algo_list_clusters, cluster_labels)
+    labels_pairs = float(cluster_labels_pairs(cluster_labels, k))
+    jaccard = intersecting_pairs / (algorithm_pairs + labels_pairs - intersecting_pairs)
+    return jaccard
+
+
+def to_clusters_list(cluster_tags, k):
+    """
+    helper function to jaccard_measure
+        :param cluster_tags: an array of n ints where cluster_tags[i] is the cluster number point i belongs to.
+        :param k: the number of clusters.
+        :return: list of lists in which converted[i] is a list of the points belonging to cluster i.
+    """
+    converted = [[] for i in range(k)]
+    for i in range(len(cluster_tags)):
+        converted[cluster_tags[i]].append(i)
+    return converted
+
+
+def count_pairs(clusters_list, cluster_labels):
+    """
+    helper function to jaccard_measure
+        :param clusters_list: list of lists containing the cluster classification by (one) of our algorithms.
+        :param cluster_labels: the classification to clusters by which the data was generated.
+        :return  algorithm_pairs: num of pairs {i, j} such that points i, j belong to the same cluster by the algorithm.
+        :return intersecting_pairs: number of pairs {i, j} such that points i, j belong to the same cluster
+                                    by the algorithm and by the make_blobs.
+    """
+    algorithm_pairs = 0
+    intersecting_pairs = 0
+    for points_in_cluster in clusters_list:
+        for i in range(len(points_in_cluster)):
+            for j in range(i+1, len(points_in_cluster)):
+                algorithm_pairs += 1
+                if cluster_labels[points_in_cluster[i]] == cluster_labels[points_in_cluster[j]]:
+                    intersecting_pairs += 1
+    return algorithm_pairs, intersecting_pairs
+
+
+def cluster_labels_pairs(cluster_labels, k):
+    """
+    helper function to jaccard_measure
+        :param cluster_labels: an array of n ints where cluster_tags[i] is the cluster number point i belongs to.
+        :param k: the number of clusters by which the data was generated.
+        :return  pairs_num: num of pairs {i, j} such that points i, j belong to the same cluster.
+    """
+    points_in_cluster = np.zeros((k,), dtype=int)
+    pairs_num = 0
+    for num in cluster_labels:
+        points_in_cluster[num] += 1
+    for cluster in points_in_cluster:
+        pairs_num += (cluster**2 - cluster) / 2
+    return pairs_num
+
+
 def visualize(points, k_original, k_algo, maps_lst):
     """
     :param points: ndarry, shape(points) = (n,d) (n points with d dimensions)
