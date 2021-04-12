@@ -143,19 +143,10 @@ def visualize(points, k_original, k_algo, maps_lst):
         ax[i].scatter(x, y, z, c=color)
         ax[i].set_title(maps_lst[i].name)
 
-    plt.figtext(0.3, 0, "insert an informative desc as requested!!!\n\n****")  # TODO, maybe use subtitle instead of this shit
-    #plt.show()
-    plt.savefig("clusters.pdf")
+    description = "Data was generated from the values:\nn = " + str(points.shape[0]) + ", k = " + str(k_original) + "\n"
+    description += "The k that was used for both algorithms was: " + str(k_algo) + "\n"
+    description += "The Jaccard measure for Spectral clustering: " + str(jaccard_spectral) + "\n"
+    description += "The Jaccard measure for K-means: " + str(jaccard_kmeans)
 
-
-# test visualize
-spec = point_cluster_map("Normalized Spectral Clustering", [0,1,0,1,0])
-kmeans = point_cluster_map("K-means", [2,2,2,1,1])
-shir_algo = point_cluster_map("another algo", [0,0,0,0,0])
-lst_map = [spec, kmeans, shir_algo]
-
-A = np.array([[j for j in range(i,i+3)]for i in range(0,15,3)], np.float64)
-visualize(A,3,3,lst_map)
-
-B = np.array([[j for j in range(i,i+2)]for i in range(0,10,2)], np.float64)
-visualize(B,3,3,lst_map)
+    plt.figtext(0.5, 0.01, description, ha='center', va='top', fontsize=16)
+    plt.savefig("clusters.pdf", bbox_inches='tight')
