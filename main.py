@@ -2,7 +2,7 @@ from sklearn.datasets import make_blobs
 import random
 import numpy as np
 import config
-from output import write_data_file, visualize, write_clusters_file
+from output import write_data_file, visualize, write_clusters_file, jaccard_measure
 from point_cluster_map import point_cluster_map  # need this for later
 from algebra import normalized_spectral_clustering
 from kmeans_pp import kmeans_pp_main
@@ -27,10 +27,6 @@ def check_input(n, k):
     if k < 1 or n < 1:
         print("one of the arguments given is not positive, shame on you")
         exit(1)
-
-
-def jaccard_measure():  # maybe should be in different module (in output.py?)
-    return 0  # TODO
 
 
 def main(is_random, n=None, k=None):
@@ -71,21 +67,15 @@ def main(is_random, n=None, k=None):
 
     write_clusters_file(spectral_cluster_tags, kmeans_cluster_tags, k)
 
-    # TODO
+    j_spectral = jaccard_measure(cluster_labels, spectral_cluster_tags, k, algorithm_k)
+    j_kmeans = jaccard_measure(cluster_labels, kmeans_cluster_tags, k, algorithm_k)
 
-    #3d visio
-    # visualize(...)
-
-    #the end?
-
-
-
-main(True)  # DEL
+    spec = point_cluster_map("Normalized Spectral Clustering", spectral_cluster_tags)
+    kmeans = point_cluster_map("K-means", kmeans_cluster_tags)
+    lst_map = [spec, kmeans]
+    visualize(points, k, algorithm_k, lst_map, j_spectral, j_kmeans)
 
 
-
-
-
-
-
-
+# TODO this is just for tests, delete before submitting
+if __name__ == '__main__':
+    main(False, 100, 5)
