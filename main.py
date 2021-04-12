@@ -55,18 +55,17 @@ def main(is_random, n=None, k=None):
 
     write_data_file(points, cluster_labels)
 
-    spectral_cluster_tags, k = normalized_spectral_clustering(points, is_random, k)
+    spectral_cluster_tags, algorithm_k = normalized_spectral_clustering(points, is_random, k)
     if spectral_cluster_tags is None:
         print("An error occurred during normalized spectrael clustring, shutting down")
         exit(1)
 
-    kmeans_cluster_tags = kmeans_pp_main(k, config.MAX_ITER, points)
+    kmeans_cluster_tags = kmeans_pp_main(algorithm_k, config.MAX_ITER, points)
     if kmeans_cluster_tags is None:
         print("An error occurred during kmeans++, shutting down")
         exit(1)
 
-    write_clusters_file(spectral_cluster_tags, kmeans_cluster_tags, k)
-
+    write_clusters_file(spectral_cluster_tags, kmeans_cluster_tags, algorithm_k)
     j_spectral = jaccard_measure(cluster_labels, spectral_cluster_tags, k, algorithm_k)
     j_kmeans = jaccard_measure(cluster_labels, kmeans_cluster_tags, k, algorithm_k)
 
@@ -74,7 +73,6 @@ def main(is_random, n=None, k=None):
     kmeans = point_cluster_map("K-means", kmeans_cluster_tags)
     lst_map = [spec, kmeans]
     visualize(points, k, algorithm_k, lst_map, j_spectral, j_kmeans)
-
 
 # TODO this is just for tests, delete before submitting
 if __name__ == '__main__':
