@@ -55,7 +55,7 @@ def convert_cluster_oriented(cluster_tags, k):
     return converted
 
 
-def jaccard_measure(cluster_labels, algo_cluster_tags, k):
+def jaccard_measure(cluster_labels, algo_cluster_tags, k_original, k_algo):
     """
         :param cluster_labels: the cluster labels from make_blobs method - our truth standard.
         :param algo_cluster_tags: an algorithms output of cluster classification.
@@ -63,9 +63,9 @@ def jaccard_measure(cluster_labels, algo_cluster_tags, k):
         :return: the relation between the number of intersecting pairs in both cases and the union of pairs.
     """
 
-    algo_list_clusters = to_clusters_list(algo_cluster_tags, k)
+    algo_list_clusters = to_clusters_list(algo_cluster_tags, k_algo)
     algorithm_pairs, intersecting_pairs = count_pairs(algo_list_clusters, cluster_labels)
-    labels_pairs = float(cluster_labels_pairs(cluster_labels, k))
+    labels_pairs = float(cluster_labels_pairs(cluster_labels, k_original))
     jaccard = intersecting_pairs / (algorithm_pairs + labels_pairs - intersecting_pairs)
     return jaccard
 
@@ -119,7 +119,7 @@ def cluster_labels_pairs(cluster_labels, k):
     return pairs_num
 
 
-def visualize(points, k_original, k_algo, maps_lst):
+def visualize(points, k_original, k_algo, maps_lst, jaccard_spectral, jaccard_kmeans):
     """
     :param points: ndarry, shape(points) = (n,d) (n points with d dimensions)
     :param k_original: amount of centers the points were generated from
@@ -148,5 +148,5 @@ def visualize(points, k_original, k_algo, maps_lst):
     description += "The Jaccard measure for Spectral clustering: " + str(jaccard_spectral) + "\n"
     description += "The Jaccard measure for K-means: " + str(jaccard_kmeans)
 
-    plt.figtext(0.5, 0.01, description, ha='center', va='top', fontsize=16)
+    plt.figtext(0.5, 0.01, description, ha='center', va= 'top', fontsize=16)
     plt.savefig("clusters.pdf", bbox_inches='tight')
