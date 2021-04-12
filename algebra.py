@@ -83,7 +83,7 @@ def QR(A):
 
 def converged(a, b):
     dif = np.absolute(a) - np.absolute(b)
-    dif = np.absolute(dif) <= 0.0001
+    dif = np.absolute(dif) <= config.EPSILON
     return np.alltrue(dif)
 
 

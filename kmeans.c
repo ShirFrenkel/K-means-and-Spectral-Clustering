@@ -1,5 +1,6 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
+#define EPSILON 0.0001
 /* written by Tom Rutenberg*/
 
 static void pList_to_cArray(PyObject*, Py_ssize_t, double**);
@@ -63,12 +64,10 @@ static void devide_to_clusters(double **observations, double **centroids, int *c
 
 static int compare_centroids(double **centroids, double **previous_centroids, int num_clusters, int dimensions){
     int i;
-    int j;
     for (i = 0 ; i < num_clusters ; i++){
-        for (j = 0 ; j < dimensions ; j++){
-            if (centroids[i][j] != previous_centroids[i][j])
-            return 0;
-        }
+            /* distance() actually returns distance square so I rise epsilon to the power of two */
+            if (distance(dimensions, centroids[i], previous_centroids[i]) > EPSILON*EPSILON)
+                return 0;
     }
     return 1;
 }

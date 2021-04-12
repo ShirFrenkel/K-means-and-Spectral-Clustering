@@ -1,4 +1,5 @@
 MAX_ITER = 300
+EPSILON = 0.0001
 
 # files
 DATA_FILE_NAME = "data.txt"
