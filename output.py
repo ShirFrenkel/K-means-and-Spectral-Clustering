@@ -2,7 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import config
+import itertools
 from point_cluster_map import point_cluster_map
+
 
 
 def write_data_file(points, cluster_labels):
@@ -95,10 +97,9 @@ def count_pairs(clusters_list, cluster_labels):
     algorithm_pairs = 0
     intersecting_pairs = 0
     for points_in_cluster in clusters_list:
-        for i in range(len(points_in_cluster)):
-            for j in range(i+1, len(points_in_cluster)):
-                algorithm_pairs += 1
-                if cluster_labels[points_in_cluster[i]] == cluster_labels[points_in_cluster[j]]:
+        algorithm_pairs += (len(points_in_cluster)**2 - len(points_in_cluster)) / 2
+        for pair in itertools.combinations(points_in_cluster, 2):
+                if cluster_labels[pair[0]] == cluster_labels[pair[1]]:
                     intersecting_pairs += 1
     return algorithm_pairs, intersecting_pairs
 
