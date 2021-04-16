@@ -1,0 +1,4 @@
+d2_heatmap = sns.heatmap(d2, annot=True, linewidths=.5, vmin=0, vmax=2 * d2.max().max(), ax=ax, fmt='.3g',
+                         cbar_kws={'label': 'Runtime (seconds)'})
+d2_heatmap.set_ylabel('K', labelpad=10, fontsize=22)
+d2_heatmap.set_xlabel('N', labelpad=10, fontsize=22)

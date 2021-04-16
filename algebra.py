@@ -96,7 +96,7 @@ def eigengap(eigenvalues):
     half_len = len(eigenvalues)//2
     delta = eigenvalues[1:half_len+1] - eigenvalues[:half_len]
     # no need for abs because eigenvalues are sorted by increasing value
-    return int(np.argmax(delta))
+    return int(np.argmax(delta)) + 1
 
 
 def normalize_rows(M):
