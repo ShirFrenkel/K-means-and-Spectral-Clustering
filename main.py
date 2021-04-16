@@ -53,6 +53,15 @@ def main(is_random, n=None, k=None):
 
     points, cluster_labels = make_blobs(n_samples=n, n_features=dim, centers=k)  # generate points
 
+    ###TODO this is just for tests, delete before submitting
+    # data = np.loadtxt(open("shir-data-1.txt", "r"), delimiter=',', dtype=np.float64)
+    # cluster_labels = data[:, -1]
+    # cluster_labels = cluster_labels.astype(np.int32)
+    # points = data[:, :-1]
+    # n=500
+    # k=8
+    ####
+
     write_data_file(points, cluster_labels)
 
     spectral_cluster_tags, algorithm_k = normalized_spectral_clustering(points, is_random, k)
@@ -76,4 +85,4 @@ def main(is_random, n=None, k=None):
 
 # TODO this is just for tests, delete before submitting
 if __name__ == '__main__':
-    main(False, 100, 5)
+    main(True, 500, 8)
