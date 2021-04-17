@@ -38,7 +38,7 @@ def main(is_random, n=None, k=None):
     :return: #TODO
     """
     # print max capacities
-    for i in [2,3]:
+    for i in [2, 3]:
         print(f'maximum capacity for {i}-dimensional data points:\n'
               f'\tnumber of centers (K) = {config.K_MAX_CAPACITY[i]}\n'
               f'\tnumber of data points (N) = {config.N_MAX_CAPACITY[i]}')
@@ -53,14 +53,14 @@ def main(is_random, n=None, k=None):
 
     points, cluster_labels = make_blobs(n_samples=n, n_features=dim, centers=k)  # generate points
 
-    ###TODO this is just for tests, delete before submitting
-    # data = np.loadtxt(open("shir-data-1.txt", "r"), delimiter=',', dtype=np.float64)
-    # cluster_labels = data[:, -1]
-    # cluster_labels = cluster_labels.astype(np.int32)
-    # points = data[:, :-1]
-    # n=500
-    # k=8
-    ####
+    ##TODO this is just for tests, delete before submitting
+    data = np.loadtxt(open("shir-data-1.txt", "r"), delimiter=',', dtype=np.float64)
+    cluster_labels = data[:, -1]
+    cluster_labels = cluster_labels.astype(np.int32)
+    points = data[:, :-1]
+    n=500
+    k=8
+    ###
 
     write_data_file(points, cluster_labels)
 
@@ -82,6 +82,7 @@ def main(is_random, n=None, k=None):
     kmeans = point_cluster_map("K-means", kmeans_cluster_tags)
     lst_map = [spec, kmeans]
     visualize(points, k, algorithm_k, lst_map, j_spectral, j_kmeans)
+
 
 # TODO this is just for tests, delete before submitting
 if __name__ == '__main__':
