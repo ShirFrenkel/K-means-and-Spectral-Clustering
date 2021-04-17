@@ -1,4 +1,6 @@
 import numpy as np
+
+import numpy as np
 from kmeans_pp import kmeans_pp_main
 import config
 
@@ -24,27 +26,7 @@ def diagonal_degree_matrix(W):
     return np.power(np.sum(W, axis=1), -0.5)
 
 
-def modified_gram_schmidt(A):
-    """
-    :param A: (ndarray) square matrix with dtype = np.float64
-    :return: Q = orthogonal matrix, R = upper triangular matrix (ndarrays)
-    shape(A) = shape(Q) = shape(R) =(n,n)
-    * function changes A
-    """
-    n = A.shape[0]
-    Q = np.zeros((n, n), dtype=np.float64)
-    R = np.zeros((n, n), dtype=np.float64)
 
-    for i in range(n):
-        R[i, i] = np.linalg.norm(A[:, i], ord=2)
-        if R[i, i] == 0:
-            print("division by zero is undefined, exiting program")  # should not get here
-            exit(1)
-        Q[:, i] = A[:, i] / R[i, i]
-        R[i, i+1:] = Q[:, i] @ A[:, i+1:]
-        A[:, i+1:] = A[:, i+1:] - (R[i,  i+1:] * Q[:, i, np.newaxis])
-
-    return Q, R
 
 
 def calc_weight(points):
@@ -132,3 +114,52 @@ def normalized_spectral_clustering(points, is_random, k=None):
     # point_cluster_map[i] = the index of the cluster that U_norm's row i is belong to = ...
     # ... = the index of the cluster that point i is belong to
     return point_cluster_map, k
+
+
+
+#%%
+def modified_gram_schmidt(A):
+    """
+    :param A: (ndarray) square matrix with dtype = np.float64
+    :return: Q = orthogonal matrix, R = upper triangular matrix (ndarrays)
+    shape(A) = shape(Q) = shape(R) =(n,n)
+    * function changes A
+    """
+    n = A.shape[0]
+    U = A #np.copy(A)#, order='F')
+    print(id(U))
+    print(id(A))
+    Q = np.zeros((n, n), dtype=np.float64)#, order='F')
+    R = np.zeros((n, n), dtype=np.float64)#, order='F')
+
+    for i in range(n):
+        R[i, i] = np.linalg.norm(U[:, i], ord=2)
+        if R[i, i] == 0:
+            print("division by zero is undefined, exiting program")  # should not get here
+            exit(1)
+        Q[:, i] = U[:, i] / R[i, i]
+        R[i, i+1:] = Q[:, i] @ U[:, i+1:]
+        U[:, i+1:] = U[:, i+1:] - (R[i,  i+1:] * Q[:, i, np.newaxis])
+
+    return Q, R
+
+
+#%%
+data = np.loadtxt(open("shir-data-1.txt", "r"), delimiter=',', dtype=np.float64)
+cluster_labels = data[:, -1]
+cluster_labels = cluster_labels.astype(np.int32)
+points = data[:, :-1]
+n=500
+k=8
+W = calc_weight(points)
+Lnorm = normalized_graph_laplacian(W, diagonal_degree_matrix(W))
+
+#%%
+import time
+start_time = time.time()
+
+eigenvalues, eignvectors = QR(Lnorm)
+
+end_time = time. time()
+time_elapsed = (end_time - start_time)
+print(time_elapsed)
