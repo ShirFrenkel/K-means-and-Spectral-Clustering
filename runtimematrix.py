@@ -14,7 +14,7 @@ import sys
 sys.path.append(os.getcwd())
 
 from datetime import datetime
-
+from main import testing_main
 import numpy as np
 import pandas as pd
 
@@ -33,9 +33,7 @@ def run(k: int, n: int):
 
     start_time = datetime.now()
 
-    ##########################################
-    ########### Run algorithm here ###########
-    ##########################################
+    testing_main(3, n, k)
 
     end_time = datetime.now()
     running_time = end_time - start_time
