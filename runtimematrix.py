@@ -32,8 +32,8 @@ def run(k: int, n: int):
         return k, n, float('inf')
 
     start_time = datetime.now()
-
-    testing_main(3, n, k)
+    if n > k:
+        testing_main(3, n, k)
 
     end_time = datetime.now()
     running_time = end_time - start_time
