@@ -7,4 +7,4 @@ CLUSTERS_FILE_NAME = "clusters.txt"
 
 # maximum capacities
 N_MAX_CAPACITY = {2: 500, 3: 500}
-K_MAX_CAPACITY = {2: 300, 3: 300}
+K_MAX_CAPACITY = {2: 249, 3: 249}

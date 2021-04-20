@@ -20,8 +20,8 @@ import pandas as pd
 
 
 TIMEOUT = 60 * 7    # After this time we use stop running (set runtime to `inf`)
-n_list = [50, 100, 150, 180, 200, 210, 220, 240, 245, 250, 255, 260, 265, 270, 280, 300, 310, 400, 500, 530, 550, 600]
-k_list = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 18, 20, 32, 64, 128]
+n_list = [350, 400, 500, 530, 550, 600]
+k_list = [32, 64, 128]
 
 data = pd.DataFrame(index=k_list, columns=n_list, dtype=np.float64)
 
