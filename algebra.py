@@ -2,19 +2,6 @@ import numpy as np
 from kmeans_pp import kmeans_pp_main
 import config
 
-"""
-NOTES:
-* add epsilon to prev pro (hw2)
-* use #DEL for temp things
-* use #TODO for future tasks
-
-for TOM:
-
-
-for Shir:
-
-"""
-
 
 def diagonal_degree_matrix(W):
     """
@@ -66,18 +53,16 @@ def normalized_graph_laplacian(W, D):
     return l_norm
 
 
-# SQR- I dont think we use A afterwards
 def QR(A):
-    A1 = A.copy()  # creating a copy so we don't change A, if A is not used afterwards we can overwrite
     n = A.shape[0]
     Q1 = np.identity(n, dtype=np.float64)
     for i in range(n):
-        Q, R = modified_gram_schmidt(A1)
-        A1 = R @ Q
+        Q, R = modified_gram_schmidt(A)
+        A = R @ Q
         if converged(Q1, Q1 @ Q):
-            return A1, Q1
+            return A, Q1
         Q1 = Q1 @ Q
-    return A1, Q1   # A1 = eigenvalues, Q1 = eigenvectors
+    return A, Q1   # A = eigenvalues, Q1 = eigenvectors
 
 
 def converged(a, b):
