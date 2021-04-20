@@ -85,11 +85,6 @@ static void pList_to_cArray(PyObject* list, Py_ssize_t list_size, double** cArra
         }
 
         vector_size = PyList_Size(vector);
-        cArray[i] = malloc(sizeof(double) * vector_size);
-         if (cArray[i] == NULL){
-            puts("Problem in allocating memory within pList_to_cArray() method");
-            Py_RETURN_NONE;
-         }
 
         for (j =0 ; j < vector_size ; j++){
             item = PyList_GetItem(vector, j);
@@ -100,9 +95,8 @@ static void pList_to_cArray(PyObject* list, Py_ssize_t list_size, double** cArra
 
             cArray[i][j] = PyFloat_AsDouble(item);
             if (cArray[i][j]  == -1 && PyErr_Occurred()){
-                puts("Something bad ...");
-                free(cArray[i]);
-                return;
+                puts("Something bad happened while converting python float to C double...");
+                continue;
             }
         }
     }
@@ -124,28 +118,9 @@ static PyObject* api_func(PyObject *self, PyObject *args){
         puts("argument parsing in api_func went bad");
         Py_RETURN_NONE; /*return None to python so it will know something went bad */
     }
-    /*printf("k = %d, n = %d, d = %d, iter = %d\n", num_clusters, num_observations, dimensions, max_iter);*/
 
-    centroids = (double **) malloc(num_clusters * sizeof(double *));
-    if(centroids == NULL){
-        puts("Problem allocating memory for centroids matrix");
-        Py_RETURN_NONE;
-    }
-
-
-    observations = (double **) malloc(num_observations * sizeof(double *));
-    if(observations == NULL){
-        puts("Problem allocating memory for observations matrix");
-        Py_RETURN_NONE;
-     }
-
-    /* Might convert to parse_data() method*/
     if (!PyList_Check(_pCentroids)) {
         puts("The argument passed as initial centroids is not a list as it should be");
-        Py_RETURN_NONE;
-    }
-    if (!PyList_Check(_pObservations)) {
-        puts("The argument passed as observations is not a list as it should be");
         Py_RETURN_NONE;
     }
 
@@ -154,16 +129,47 @@ static PyObject* api_func(PyObject *self, PyObject *args){
         puts("Number of formal and actual clusters does not match!");
         Py_RETURN_NONE;
     }
+
+    centroids = (double **) malloc(num_clusters * sizeof(double *));
+    if(centroids == NULL){
+        puts("Problem allocating memory for centroids matrix");
+        Py_RETURN_NONE;
+    }
+
+    for (i = 0 ; i < num_clusters ; i++){
+         centroids[i] = calloc(dimensions, sizeof(double));
+         if (centroids[i] == NULL){
+            puts("Problem allocating memory for one of the centroids");
+            Py_RETURN_NONE;
+         }
+    }
     pList_to_cArray(_pCentroids, n, centroids);
 
 
-
+    if (!PyList_Check(_pObservations)) {
+        puts("The argument passed as observations is not a list as it should be");
+        Py_RETURN_NONE;
+    }
     n = PyList_Size(_pObservations);
     if (n != num_observations){
         puts("Number of formal and actual observations does not match!");
         Py_RETURN_NONE;
     }
+
+    observations = (double **) malloc(num_observations * sizeof(double *));
+    if(observations == NULL){
+        puts("Problem allocating memory for observations matrix");
+        Py_RETURN_NONE;
+     }
+    for (i = 0 ; i < num_observations ; i++){
+         observations[i] = calloc(dimensions, sizeof(double));
+         if (observations[i] == NULL){
+            puts("Problem allocating memory for one of the observations");
+            Py_RETURN_NONE;
+         }
+    }
     pList_to_cArray(_pObservations, n, observations);
+
 
     previous_centroids = (double **) malloc(num_clusters * sizeof(double *));
     if (previous_centroids == NULL){
@@ -238,5 +244,3 @@ PyInit_mykmeanssp(void)
 {
     return PyModule_Create(&_moduledef);
 }
-
-
