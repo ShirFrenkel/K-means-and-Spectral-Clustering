@@ -128,7 +128,7 @@ def visualize(points, k_original, k_algo, maps_lst, jaccard_spectral, jaccard_km
     :param maps_lst: lst of point_cluster_map objects matching the input's points
     @post: creates clusters.pdf with axis for each map in maps_lst ordered horizontally by the maps_lst order
     """
-    # TODO ? change to T order
+
     dim = points.shape[1]
     x = points[:, 0]
     y = points[:, 1]

@@ -52,12 +52,10 @@ def kmeans_pp_main(K, MAX_ITER, obs):
     N = the number of observations, d = the dimension of each observation
     :return: point_cluster_map !!! or None if error occurred !!!
     point_cluster_map[i] = the index of the cluster that point i is belong to (count starts from 0)"""
+
     N = obs.shape[0]
     d = obs.shape[1]
     init_cent, init_indices = k_means_pp(obs, N, K, d)
-    #print(','.join(str(x) for x in init_indices))  # DEL
-    return ckm.api_func(init_cent, obs.tolist(), K, N, d, MAX_ITER)  # TODO, tom need to change C func to return point_cluster_map
 
-
-#kmeans_pp_main(3,300,np.array([[j for j in range(i,i+4)]for i in range(0,40,4)], np.float64))  # DEL
+    return ckm.api_func(init_cent, obs.tolist(), K, N, d, MAX_ITER)
 
