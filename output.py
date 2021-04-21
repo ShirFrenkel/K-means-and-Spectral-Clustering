@@ -147,8 +147,8 @@ def visualize(points, k_original, k_algo, maps_lst, jaccard_spectral, jaccard_km
 
     description = "Data was generated from the values:\nn = " + str(points.shape[0]) + ", k = " + str(k_original) + "\n"
     description += "The k that was used for both algorithms was: " + str(k_algo) + "\n"
-    description += "The Jaccard measure for Spectral clustering: " + str(jaccard_spectral) + "\n"
-    description += "The Jaccard measure for K-means: " + str(jaccard_kmeans)
+    description += "The Jaccard measure for Spectral clustering: " + ("%.2f" % jaccard_spectral) + "\n"
+    description += "The Jaccard measure for K-means: " + ("%.2f" % jaccard_kmeans)
 
     plt.figtext(0.5, 0.01, description, ha='center', va= 'top', fontsize=16)
     plt.savefig(config.CLUSTERS_PDF_FILE_NAME, bbox_inches='tight')
