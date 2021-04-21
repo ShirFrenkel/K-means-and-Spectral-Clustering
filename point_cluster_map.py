@@ -1,3 +1,5 @@
+"""This is a helper class used to make the output writing more flexible"""
+
 class point_cluster_map:
     def __init__(self, name, map):
         """

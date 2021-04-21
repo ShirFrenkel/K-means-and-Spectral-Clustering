@@ -2,10 +2,14 @@ from sklearn.datasets import make_blobs
 import random
 import config
 from output import write_data_file, visualize, write_clusters_file, jaccard_measure
-from point_cluster_map import point_cluster_map  # need this for later
+from point_cluster_map import point_cluster_map
 from algebra import normalized_spectral_clustering
 from kmeans_pp import kmeans_pp_main
 
+""" The main module of the whole project. you use it by invoking main with the following arguments:
+    is_random flag, number of points and a number of clusters.
+    if you use the invoke task run and is_random is not set to false then the other two args are optional.
+"""
 
 def check_input(n, k):
     if n is None or k is None:

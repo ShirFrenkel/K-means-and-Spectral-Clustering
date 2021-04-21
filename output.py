@@ -4,7 +4,9 @@ from matplotlib import cm
 import config
 import itertools
 
-
+"""This module handles everything that has to do with the output of the project
+    We decided to write the Jaccard measure function here since it is only used when writing to the output.
+"""
 
 def write_data_file(points, cluster_labels):
     """

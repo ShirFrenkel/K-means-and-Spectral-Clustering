@@ -1,7 +1,10 @@
 import mykmeanssp as ckm
-import argparse
-import pandas as pd
 import numpy as np
+
+"""This modules is the K-means algorithm.
+    You use it by invoking the main method with the arguments: num of clusters, maximum num of iterations and a dataset.
+    this module in turn invoke the C extension which it's source code file is kmeans.c
+"""
 
 
 def calc_D(mu, x):

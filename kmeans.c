@@ -1,7 +1,11 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #define EPSILON 0.0001
-/* written by Tom Rutenberg */
+/* This is the C extension for the K-means algorithm
+    You invoke it from a python program (in this case kmeans_pp.py) by calling api_func.
+    The returned value is a python list of ints, as many as the number of points in the dataset passed as an argument
+    where the value in index i is the cluster to which point was classified by the algorithm.
+ */
 
 static void pList_to_cArray(PyObject*, int, double**);
 static void adding (double *c, double *, int);
@@ -14,6 +18,7 @@ static int allocate_memory(double***, double***, double***, int**, int n, int k,
 
 
 static void adding (double *centroid, double *observation, int dimension) {
+    /* a helper function used to calculate the centroid of a cluster */
     int i;
     for (i = 0 ; i < dimension ; i++)
         centroid[i] += observation[i];
@@ -50,6 +55,7 @@ static double distance(int dimensions, double *observation, double *centroid){
 }
 
 static void divide_to_clusters(double **observations, double **centroids, int *cluster_tags, int dimensions, int num_observations, int num_clusters){
+    /* a function that assigns each observation to it's closest centroid */
     int i;
     for (i = 0 ; i < num_observations ; i++){ /* for each observation */
         double min_dist = distance(dimensions, observations[i], centroids[0]);
@@ -66,6 +72,7 @@ static void divide_to_clusters(double **observations, double **centroids, int *c
 }
 
 static int compare_centroids(double **centroids, double **previous_centroids, int num_clusters, int dimensions){
+    /* a function which determines whether the centroids have changed in the past iteration */
     int i;
     for (i = 0 ; i < num_clusters ; i++){
             /* distance() actually returns distance square so I rise epsilon to the power of two */
@@ -76,6 +83,7 @@ static int compare_centroids(double **centroids, double **previous_centroids, in
 }
 
 static void pList_to_cArray(PyObject* list, int list_size, double** cArray){
+    /* a function which takes a python list of lists passed as an arguments and stores it in a 2D C array */
     int i;
     Py_ssize_t j, vector_size;
     PyObject *vector;
@@ -108,6 +116,8 @@ static void pList_to_cArray(PyObject* list, int list_size, double** cArray){
 }
 
 static int validate_input(PyObject* _pCentroids, PyObject* _pObservations, int num_clusters, int num_observations){
+    /* a function that verifies that the number of points and clusters passed matches the dataset passed */
+
     Py_ssize_t n;
 
     if (!PyList_Check(_pCentroids)) {
@@ -135,6 +145,8 @@ static int validate_input(PyObject* _pCentroids, PyObject* _pObservations, int n
 }
 
 static int allocate_memory(double*** centroids, double*** observations, double*** previous_centroids, int** cluster_tags, int n, int k, int d){
+    /* a function that allocated all memory needed for the algorithm, returns 1 on successful run, 0 otherwise */
+
     int i;
     *centroids = (double **) malloc(k * sizeof(double *));
     if(*centroids == NULL){
@@ -187,6 +199,10 @@ static int allocate_memory(double*** centroids, double*** observations, double**
 }
 
 static PyObject* api_func(PyObject *self, PyObject *args){
+    /* the "main" function of the C extension, takes the following arguments:
+        list of centroids, list of points, number of clusters, number of points, the dimension and max number of iterations.
+    */
+
     PyObject *_pCentroids, *_pObservations;
     int  num_clusters, num_observations, dimensions, max_iter, i;
     int iteration = 0;
