@@ -50,8 +50,9 @@ def kmeans_pp_main(K, MAX_ITER, obs):
     :param MAX_ITER: the maximum number of iterations of the K-means algorithm, 0 < MAX_ITER
     :param obs: the observations (points) to be clustered, numpy matrix of shape (N,d)
     N = the number of observations, d = the dimension of each observation
-    :return: point_cluster_map !!! or None if error occurred !!!
-    point_cluster_map[i] = the index of the cluster that point i is belong to (count starts from 0)"""
+    :return: mapping !!! or None if error occurred !!!
+    mapping[i] = the index of the cluster that point i is belong to (count starts from 0)
+    len(mapping) = N """
 
     N = obs.shape[0]
     d = obs.shape[1]

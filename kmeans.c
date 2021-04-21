@@ -1,7 +1,7 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #define EPSILON 0.0001
-/* written by Tom Rutenberg*/
+/* written by Tom Rutenberg */
 
 static void pList_to_cArray(PyObject*, int, double**);
 static void adding (double *c, double *, int);
@@ -40,6 +40,7 @@ static void calculate_updated_centroids(double **observations, double **centroid
 }
 
 static double distance(int dimensions, double *observation, double *centroid){
+    /* computes squared distance (with l2 norm) */
     double result = 0;
     int i;
     for (i = 0 ; i < dimensions ; i++){

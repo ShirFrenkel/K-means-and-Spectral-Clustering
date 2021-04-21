@@ -94,8 +94,8 @@ def normalized_spectral_clustering(points, is_random, k=None):
     """
     :param points: ndarry, shape(points) = (n,d) (n points with d dimensions)
     if is_random, k is computed by eigengap heuristic, else, k is supplied as input
-    :return: point_cluster_map, k !!! or None, k if error occurred !!!
-    point_cluster_map[i] = the index of the cluster that point i is belong to (count starts from 0)
+    :return: mapping, k !!! or None, k if error occurred !!!
+    mapping[i] = the index of the cluster that point i is belong to (count starts from 0)
     """
     W = calc_weight(points)
     Lnorm = normalized_graph_laplacian(W, diagonal_degree_matrix(W))
@@ -113,7 +113,7 @@ def normalized_spectral_clustering(points, is_random, k=None):
     U = eignvectors[:, 0:k]  # U.shape = (n,k)
     U_norm = normalize_rows(U)  # U_norm := U with normalized rows
     # Treating each row of U_norm as a point in Rk, cluster them into k clusters via the K-means algorithm:
-    point_cluster_map = kmeans_pp_main(k, config.MAX_ITER, U_norm)  # arguments meaning: K, MAX_ITER, obs matrix
-    # point_cluster_map[i] = the index of the cluster that U_norm's row i is belong to = ...
+    mapping = kmeans_pp_main(k, config.MAX_ITER, U_norm)  # arguments meaning: K, MAX_ITER, obs matrix
+    # mapping[i] = the index of the cluster that U_norm's row i is belong to = ...
     # ... = the index of the cluster that point i is belong to
-    return point_cluster_map, k
+    return mapping, k

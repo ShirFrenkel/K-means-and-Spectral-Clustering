@@ -3,7 +3,8 @@ EPSILON = 0.0001
 
 # files
 DATA_FILE_NAME = "data.txt"
-CLUSTERS_FILE_NAME = "clusters.txt"
+CLUSTERS_TEXT_FILE_NAME = "clusters.txt"
+CLUSTERS_PDF_FILE_NAME = "clusters.pdf"
 
 # maximum capacities
 N_MAX_CAPACITY = {2: 500, 3: 500}

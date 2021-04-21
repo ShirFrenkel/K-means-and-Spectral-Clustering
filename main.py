@@ -1,6 +1,5 @@
 from sklearn.datasets import make_blobs
 import random
-import numpy as np
 import config
 from output import write_data_file, visualize, write_clusters_file, jaccard_measure
 from point_cluster_map import point_cluster_map  # need this for later
@@ -24,9 +23,10 @@ def main(is_random, n=None, k=None):
     """
     :param n: amount of points
     :param k: amount of centers
-    :param is_random: when is_random=True, n, k will be decided randomly with
-    the max capacity bound, the inputs n, k in that case are not used
-    :return: #TODO
+    :param is_random: when is_random=True, n, k (for generating points) will be decided randomly with
+    the max capacity bound, the Spectral algorithm will set k by eigengap heuristic and the inputs n, k in that case
+    are not used
+    @post: creates files (in the code directory) in the format mentioned in the assignment
     """
     # print max capacities
     for i in [2, 3]:
