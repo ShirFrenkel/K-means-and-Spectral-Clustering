@@ -23,7 +23,6 @@ def write_data_file(points, cluster_labels):
     f = open(config.DATA_FILE_NAME, "w")
     f.write(output)
     f.close()
-    #TODO not sure what is the accuracy level we need for points
 
 
 def write_clusters_file(spectral_tags, kmeans_tags, k):
