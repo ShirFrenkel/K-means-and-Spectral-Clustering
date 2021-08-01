@@ -22,11 +22,11 @@ Generates data points, clusters the data using both algorithms and creates 3 out
 ## Demo
 clusters.pdf visualization created by `$ python -m invoke run -k=5 -n=150 --no-Random`:
   
-  <img src="https://i.ibb.co/JxWg536/demo.png" width='500px'>
+  <img src="https://github.com/ShirFrenkel/K-means-and-Spectral-Clustering/blob/master/results%20examples/2d_5k_150n_noRandom.PNG" width='500px'>
   
 clusters.pdf visualization created by `$ python -m invoke run -k=6 -n=250 --no-Random`:
   
-  <img src="https://i.ibb.co/JxWg536/demo.png" width='500px'>
+  <img src="https://github.com/ShirFrenkel/K-means-and-Spectral-Clustering/blob/master/results%20examples/3d_6k_250n_noRandom.PNG" width='500px'>
 
 
 ## Files and Modules
@@ -36,6 +36,7 @@ clusters.pdf visualization created by `$ python -m invoke run -k=6 -n=250 --no-R
    * **kmeans_pp.py:** KMeans++ initialization algorithm, and caller to the kmeans CAPI module.
    * **algebra.py:** Linear algebra algorithms and the Spectral clustering algorithm implementation.
    * **output.py:** Results processing and outputting. 
+   * **point_cluster_map.py:** A helper class used to make the output writing more flexible.
    * **setup.py:**  Installation of kmeans CAPI extension.
    * **tasks.py:** Used for the invoke tasks.
 
