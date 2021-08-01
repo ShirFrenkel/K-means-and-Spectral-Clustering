@@ -2,10 +2,14 @@ from sklearn.datasets import make_blobs
 import random
 import config
 from output import write_data_file, visualize, write_clusters_file, jaccard_measure
-from point_cluster_map import point_cluster_map  # need this for later
+from point_cluster_map import point_cluster_map
 from algebra import normalized_spectral_clustering
 from kmeans_pp import kmeans_pp_main
 
+""" The main module of the whole project. you use it by invoking main with the following arguments:
+    is_random flag, number of points and a number of clusters.
+    if you use the invoke task run and is_random is not set to false then the other two args are optional.
+"""
 
 def check_input(n, k):
     if n is None or k is None:
@@ -48,49 +52,6 @@ def main(is_random, n=None, k=None):
 
     spectral_cluster_tags, algorithm_k = normalized_spectral_clustering(points, is_random, k)
 
-    if spectral_cluster_tags is None:
-        print("An error occurred during normalized spectrael clustring, shutting down")
-        exit(1)
-
-    kmeans_cluster_tags = kmeans_pp_main(algorithm_k, config.MAX_ITER, points)
-    if kmeans_cluster_tags is None:
-        print("An error occurred during kmeans++, shutting down")
-        exit(1)
-
-    write_clusters_file(spectral_cluster_tags, kmeans_cluster_tags, algorithm_k)
-    j_spectral = jaccard_measure(cluster_labels, spectral_cluster_tags, k, algorithm_k)
-    j_kmeans = jaccard_measure(cluster_labels, kmeans_cluster_tags, k, algorithm_k)
-
-    spec = point_cluster_map("Normalized Spectral Clustering", spectral_cluster_tags)
-    kmeans = point_cluster_map("K-means", kmeans_cluster_tags)
-    lst_map = [spec, kmeans]
-    visualize(points, k, algorithm_k, lst_map, j_spectral, j_kmeans)
-
-
-# ##TODO this is just for tests, delete before submitting
-def testing_main(d=None, n=None, k=None):
-    """
-    This is a fucntion only for testing delete before submitting
-    :param n: amount of points
-    :param k: amount of centers
-    the max capacity bound, the inputs n, k in that case are not used
-    :return: #TODO
-    """
-    # print max capacities
-    for i in [2, 3]:
-        print(f'maximum capacity for {i}-dimensional data points:\n'
-              f'\tnumber of centers (K) = {config.K_MAX_CAPACITY[i]}\n'
-              f'\tnumber of data points (N) = {config.N_MAX_CAPACITY[i]}')
-
-    dim = d  # dimensions for each point
-
-    check_input(n, k)
-
-    points, cluster_labels = make_blobs(n_samples=n, n_features=dim, centers=k)  # generate points
-
-    write_data_file(points, cluster_labels)
-
-    spectral_cluster_tags, algorithm_k = normalized_spectral_clustering(points, False, k)
     if spectral_cluster_tags is None:
         print("An error occurred during normalized spectrael clustring, shutting down")
         exit(1)

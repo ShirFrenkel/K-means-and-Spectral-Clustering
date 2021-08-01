@@ -2,6 +2,10 @@ import numpy as np
 from kmeans_pp import kmeans_pp_main
 import config
 
+"""This module contains the functions which implement the Normalized Spectral Clustering algorithm.
+    in order to use it you only need to invoke normalized_spectral_clustering() function
+    with the following arguments: a data set of points, a is_random flag and a number of clusters k.
+"""
 
 def diagonal_degree_matrix(W):
     """

@@ -1,3 +1,4 @@
+"""This module holds file names and constants for the project"""
 MAX_ITER = 300
 EPSILON = 0.0001
 
